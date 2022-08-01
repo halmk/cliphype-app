@@ -10,9 +10,9 @@
 </template>
 
 <script>
-import StreamerSearchForm from '../components/StreamerSearchForm.vue';
+import StreamerSearchForm from '../components/StreamerSearchForm.vue'
 export default {
-    name: "IndexPage",
-    components: { StreamerSearchForm }
+  name: 'IndexPage',
+  components: { StreamerSearchForm },
 }
 </script>

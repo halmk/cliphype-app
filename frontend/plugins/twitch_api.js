@@ -1,168 +1,186 @@
-var TwitchAPI = {
-	apiUrl: "http://localhost:8000/twitchapi",
-	clientId: '',
-	token: '',
-	is_token: false,
+import axios from 'axios';
 
-	getRequest: async function(url, params) {
-		if (this.is_token) {
-			return await axios.get(url, {
-				headers: {
-					'Client-ID': this.clientId,
-					'Authorization': `Bearer ${this.token}`
-				},
-				params: params
-			});
-		} else {
-			return await axios.get(this.apiUrl, {
-				params: {
-					'url': url,
-					'params': params
-				}
-			});
-		}
-	},
+const TwitchAPI = {
+  apiUrl: 'http://localhost:5000/api/twitch',
+  clientId: '',
+  token: '',
+  has_token: false,
 
-	/* 名前からIDを取得する */
-	getUserId: async function(name) {
-		let url = 'https://api.twitch.tv/helix/users';
-		let params = {
-			'login': name
-		};
+  getRequest: async (url, params) => {
+    if (TwitchAPI.has_token) {
+      return await axios.get(url, {
+        headers: {
+          'Client-ID': TwitchAPI.clientId,
+          Authorization: `Bearer ${TwitchAPI.token}`,
+        },
+        params,
+      })
+    } else {
+      params.url = url
+			console.log(params, TwitchAPI.apiUrl)
+      return await axios.get(TwitchAPI.apiUrl, {
+        params,
+      })
+    }
+  },
 
-		return await this.getRequest(url, params);
-	},
+  /* 名前からIDを取得する */
+  getUserId: async (name) => {
+    const url = 'https://api.twitch.tv/helix/users'
+    const params = {
+      login: name,
+    }
 
-	/* ユーザがフォローしている配信者を取得する */
-	getFollows: async function(clientId) {
-		let url = 'https://api.twitch.tv/helix/users/follows';
-		let params = {
-			'from_id': clientId,
-			'first': 100
-		};
+    return await TwitchAPI.getRequest(url, params)
+  },
 
-		return await this.getRequest(url, params);
-	},
+  /* ユーザがフォローしている配信者を取得する */
+  getFollows: async (clientId) => {
+    const url = 'https://api.twitch.tv/helix/users/follows'
+    const params = {
+      from_id: clientId,
+      first: 100,
+    }
 
-	/* ユーザがフォローしている配信者を取得する */
-	getAfterFollows: async function(clientId, after) {
-		let url = 'https://api.twitch.tv/helix/users/follows';
-		let params = {
-			'from_id': clientId,
-			'first': 100,
-			'after': after
-		};
+    return await TwitchAPI.getRequest(url, params)
+  },
 
-		return await this.getRequest(url, params);
-	},
+  /* ユーザがフォローしている配信者を取得する */
+  getAfterFollows: async (clientId, after) => {
+    const url = 'https://api.twitch.tv/helix/users/follows'
+    const params = {
+      from_id: clientId,
+      first: 100,
+      after,
+    }
 
-	/* ユーザIDからユーザの情報を取得する */
-	getUsers: async function(userIds) {
-		let url = 'https://api.twitch.tv/helix/users';
-		let params = {
-			'id': userIds
-		}
+    return await TwitchAPI.getRequest(url, params)
+  },
 
-		return await this.getRequest(url, params);
-	},
+  /* ユーザIDからユーザの情報を取得する */
+  getUsers: async (userIds) => {
+    const url = 'https://api.twitch.tv/helix/users'
+    const params = {
+      id: userIds,
+    }
 
-	/* 配信者のIDを指定して、その配信のクリップを取得する */
-	getClips: async function(streamerId, datepickerStartedAt, datepickerEndedAt) {
-		let url = 'https://api.twitch.tv/helix/clips';
-		let params = {
-			'broadcaster_id': streamerId,
-			'started_at': datepickerStartedAt, // RFC3339 format (ex:'2019-08-31T00:00:00Z')
-			'ended_at': datepickerEndedAt,     // RFC3339 format
-			'first': 27,
-		};
+    return await TwitchAPI.getRequest(url, params)
+  },
 
-		return await this.getRequest(url, params);
-	},
+  /* 配信者のIDを指定して、その配信のクリップを取得する */
+  getClips: async (streamerId, datepickerStartedAt, datepickerEndedAt) => {
+    const url = 'https://api.twitch.tv/helix/clips'
+    const params = {
+      broadcaster_id: streamerId,
+      started_at: datepickerStartedAt, // RFC3339 format (ex:'2019-08-31T00:00:00Z')
+      ended_at: datepickerEndedAt, // RFC3339 format
+      first: 27,
+    }
 
-	/* クリップのIDを指定してクリップを取得する */
-	getClipById: async function(clip_id) {
-		let url = 'https://api.twitch.tv/helix/clips';
-		let params = {
-			'id': clip_id,
-		};
+    return await TwitchAPI.getRequest(url, params)
+  },
 
-		return await this.getRequest(url, params);
-	},
+  /* クリップのIDを指定してクリップを取得する */
+  getClipById: async (clipId) => {
+    const url = 'https://api.twitch.tv/helix/clips'
+    const params = {
+      id: clipId,
+    }
 
-	/* カテゴリのIDを指定してクリップを取得する */
-	getClipsByGameId: async function(category_id, datepickerStartedAt, datepickerEndedAt) {
-		let url = 'https://api.twitch.tv/helix/clips';
-		let params = {
-			'game_id': category_id,
-			'started_at': datepickerStartedAt, // RFC3339 format (ex:'2019-08-31T00:00:00Z')
-			'ended_at': datepickerEndedAt,     // RFC3339 format
-			'first': 27,
-		};
+    return await TwitchAPI.getRequest(url, params)
+  },
 
-		return await this.getRequest(url, params);
-	},
+  /* カテゴリのIDを指定してクリップを取得する */
+  getClipsByGameId: async (
+    categoryId,
+    datepickerStartedAt,
+    datepickerEndedAt
+  ) => {
+    const url = 'https://api.twitch.tv/helix/clips'
+    const params = {
+      game_id: categoryId,
+      started_at: datepickerStartedAt, // RFC3339 format (ex:'2019-08-31T00:00:00Z')
+      ended_at: datepickerEndedAt, // RFC3339 format
+      first: 27,
+    }
 
-	/* afterで指定されているクリップデータを追加で読み込む */
-	getAfterClips: async function(streamerId, datepickerStartedAt, datepickerEndedAt, clipsAfter) {
-		let url = 'https://api.twitch.tv/helix/clips';
-		let params = {
-			'broadcaster_id': streamerId,
-			'started_at': datepickerStartedAt, // RFC3339 format (ex:'2019-08-31T00:00:00Z')
-			'ended_at': datepickerEndedAt,     // RFC3339 format
-			'first': 27,
-			'after': clipsAfter,
-		};
+    return await TwitchAPI.getRequest(url, params)
+  },
 
-		return await this.getRequest(url, params);
-	},
+  /* afterで指定されているクリップデータを追加で読み込む */
+  getAfterClips: async (
+    streamerId,
+    datepickerStartedAt,
+    datepickerEndedAt,
+    clipsAfter
+  ) => {
+    const url = 'https://api.twitch.tv/helix/clips'
+    const params = {
+      broadcaster_id: streamerId,
+      started_at: datepickerStartedAt, // RFC3339 format (ex:'2019-08-31T00:00:00Z')
+      ended_at: datepickerEndedAt, // RFC3339 format
+      first: 27,
+      after: clipsAfter,
+    }
 
-	/* afterで指定されているクリップデータを追加で読み込む */
-	getAfterClipsByGameId: async function(category_id, datepickerStartedAt, datepickerEndedAt, clipsAfter) {
-		let url = 'https://api.twitch.tv/helix/clips';
-		let params = {
-			'game_id': category_id,
-			'started_at': datepickerStartedAt, // RFC3339 format (ex:'2019-08-31T00:00:00Z')
-			'ended_at': datepickerEndedAt,     // RFC3339 format
-			'first': 27,
-			'after': clipsAfter,
-		};
+    return await TwitchAPI.getRequest(url, params)
+  },
 
-		return await this.getRequest(url, params);
-	},
+  /* afterで指定されているクリップデータを追加で読み込む */
+  getAfterClipsByGameId: async (
+    categoryId,
+    datepickerStartedAt,
+    datepickerEndedAt,
+    clipsAfter
+  ) => {
+    const url = 'https://api.twitch.tv/helix/clips'
+    const params = {
+      game_id: categoryId,
+      started_at: datepickerStartedAt, // RFC3339 format (ex:'2019-08-31T00:00:00Z')
+      ended_at: datepickerEndedAt, // RFC3339 format
+      first: 27,
+      after: clipsAfter,
+    }
 
+    return await TwitchAPI.getRequest(url, params)
+  },
 
-	/* 配信アーカイブを取得する */
-	getVideos: async function(streamerId) {
-		let url = 'https://api.twitch.tv/helix/videos';
-		let params = {
-			'user_id': streamerId,
-			'type': 'archive',
-			'first': 100,
-		};
+  /* 配信アーカイブを取得する */
+  getVideos: async (streamerId) => {
+    const url = 'https://api.twitch.tv/helix/videos'
+    const params = {
+      user_id: streamerId,
+      type: 'archive',
+      first: 100,
+    }
 
-		return await this.getRequest(url, params);
-	},
+    return await TwitchAPI.getRequest(url, params)
+  },
 
-	/* 配信者のIDを指定して、その配信のクリップを取得する */
-	getArchiveClips: async function(streamerId, archiveStartDate, archiveEndDate) {
-		let url = 'https://api.twitch.tv/helix/clips';
-		let params = {
-			'broadcaster_id': streamerId,
-			'started_at': archiveStartDate, // RFC3339 format (ex:'2019-08-31T00:00:00Z')
-			'ended_at': archiveEndDate,     // RFC3339 format
-			'first': 27,
-		};
+  /* 配信者のIDを指定して、その配信のクリップを取得する */
+  getArchiveClips: async (streamerId, archiveStartDate, archiveEndDate) => {
+    const url = 'https://api.twitch.tv/helix/clips'
+    const params = {
+      broadcaster_id: streamerId,
+      started_at: archiveStartDate, // RFC3339 format (ex:'2019-08-31T00:00:00Z')
+      ended_at: archiveEndDate, // RFC3339 format
+      first: 27,
+    }
 
-		return await this.getRequest(url, params);
-	},
+    return await TwitchAPI.getRequest(url, params)
+  },
 
-	/* カテゴリの検索クエリを指定して、カテゴリを検索する */
-	searchCategories: async function(categoryNameQuery) {
-		let url = 'https://api.twitch.tv/helix/search/categories';
-		let params = {
-			'query': categoryNameQuery,
-		};
+  /* カテゴリの検索クエリを指定して、カテゴリを検索する */
+  searchCategories: async (categoryNameQuery) => {
+    const url = 'https://api.twitch.tv/helix/search/categories'
+    const params = {
+      query: categoryNameQuery,
+    }
 
-		return await this.getRequest(url, params);
-	}
+    return await TwitchAPI.getRequest(url, params)
+  },
+}
+
+export default ({ app }, inject) => {
+  inject('twitch', TwitchAPI)
 }

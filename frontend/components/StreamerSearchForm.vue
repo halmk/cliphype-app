@@ -7,11 +7,11 @@
       append-outer-icon="mdi-magnify"
       clearable
       tyep="text"
-      @click:append-outer="moveStreamerClipPage"
       hide-details
       filled
       dense
       outlined
+      @click:append-outer="moveStreamerPage"
     ></v-text-field>
   </div>
 </template>
@@ -20,12 +20,19 @@
 export default {
   name: 'StreamerSearchForm',
   data: () => ({
-    streamer_id: ''
+    streamer_id: '',
   }),
   methods: {
-    moveStreamerClipPage () {
-      window.alert(this.streamer_id)
-    }
+    moveStreamerPage() {
+      console.log(this.$twitch.apiUrl)
+      this.$twitch.getUserId(this.streamer_id)
+        .then(function(response) {
+          console.log(response)
+          this.$router.push('/app')
+        })
+    },
+  },
+  mounted() {
   }
 }
 </script>

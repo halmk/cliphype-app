@@ -62,30 +62,30 @@
 <script>
 import StreamerSearchForm from '../components/StreamerSearchForm.vue'
 export default {
-    name: "DefaultLayout",
-    data() {
-        return {
-            clipped: true,
-            drawer: false,
-            fixed: false,
-            items: [
-                {
-                    icon: "mdi-apps",
-                    title: "Welcome",
-                    to: "/",
-                },
-                {
-                    icon: "mdi-alpha-a-box",
-                    title: "App",
-                    to: "/app",
-                }
-            ],
-            miniVariant: false,
-            right: true,
-            rightDrawer: false,
-            title: "Cliplist",
-        };
-    },
-    components: { StreamerSearchForm }
+  name: 'DefaultLayout',
+  components: { StreamerSearchForm },
+  data() {
+    return {
+      clipped: true,
+      drawer: false,
+      fixed: false,
+      items: [
+        {
+          icon: 'mdi-apps',
+          title: 'Welcome',
+          to: '/',
+        },
+        {
+          icon: 'mdi-alpha-a-box',
+          title: 'App',
+          to: '/app',
+        },
+      ],
+      miniVariant: false,
+      right: true,
+      rightDrawer: false,
+      title: 'Cliplist',
+    }
+  },
 }
 </script>

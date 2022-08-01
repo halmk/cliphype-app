@@ -14,10 +14,10 @@
 </template>
 
 <script>
-import StreamerSearchForm from '../components/StreamerSearchForm.vue';
-import ClipList from '../components/ClipList.vue';
+import StreamerSearchForm from '../components/StreamerSearchForm.vue'
+import ClipList from '../components/ClipList.vue'
 export default {
-    name: "AppPage",
-    components: { StreamerSearchForm, ClipList }
+  name: 'AppPage',
+  components: { StreamerSearchForm, ClipList },
 }
 </script>
