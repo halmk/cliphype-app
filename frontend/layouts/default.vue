@@ -60,10 +60,8 @@
 </template>
 
 <script>
-import StreamerSearchForm from '../components/StreamerSearchForm.vue'
 export default {
   name: 'DefaultLayout',
-  components: { StreamerSearchForm },
   data() {
     return {
       clipped: true,

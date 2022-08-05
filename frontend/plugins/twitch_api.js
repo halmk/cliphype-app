@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const TwitchAPI = {
+  // apiUrl: 'https://cliplist-ttv.herokuapp.com/api/twitch',
   apiUrl: 'http://localhost:5000/api/twitch',
   clientId: '',
   token: '',

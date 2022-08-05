@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-text-field
-      v-model="streamer_id"
+      v-model="streamerId"
       label="Streamer ID"
       placeholder="shroud"
       append-outer-icon="mdi-magnify"
@@ -20,15 +20,15 @@
 export default {
   name: 'StreamerSearchForm',
   data: () => ({
-    streamer_id: '',
+    streamerId: '',
   }),
   methods: {
     moveStreamerPage() {
       console.log(this.$twitch.apiUrl)
-      this.$twitch.getUserId(this.streamer_id)
-        .then(function(response) {
+      this.$twitch.getUserId(this.streamerId)
+        .then((response) => {
           console.log(response)
-          this.$router.push('/app')
+          this.$router.push(`/app/${this.streamerId}`)
         })
     },
   },

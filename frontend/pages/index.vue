@@ -1,18 +1,20 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col class="blue" cols="12" sm="8" md="10" lg="12">
-      <About />
-    </v-col>
-    <v-col cols="12" sm="4" my-2>
-      <StreamerSearchForm />
-    </v-col>
-  </v-row>
+  <div>
+    <v-row justify="center" align="center">
+      <v-col class="grey lighten-3" cols="12" sm="8" md="10" lg="12">
+        <About />
+      </v-col>
+    </v-row>
+    <v-row justify="center" align="center" class="my-5">
+      <v-col cols="12" sm="4">
+        <StreamerSearchForm />
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>
-import StreamerSearchForm from '../components/StreamerSearchForm.vue'
 export default {
-  name: 'IndexPage',
-  components: { StreamerSearchForm },
+  name: 'AppIndexPage',
 }
 </script>
