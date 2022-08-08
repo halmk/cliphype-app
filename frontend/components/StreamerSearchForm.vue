@@ -25,14 +25,16 @@ export default {
     error: false,
   }),
   watch: {
-    streamerId () {
+    streamerId() {
       this.error = false
-    }
+    },
   },
+  mounted() {},
   methods: {
     moveStreamerPage() {
       console.log(this.$twitch.apiUrl)
-      this.$twitch.getUserId(this.streamerId)
+      this.$twitch
+        .getUserId(this.streamerId)
         .then((response) => {
           console.log(response)
           const data = response.data.response.data
@@ -49,7 +51,5 @@ export default {
         })
     },
   },
-  mounted() {
-  }
 }
 </script>

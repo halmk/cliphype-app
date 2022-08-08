@@ -8,23 +8,29 @@
     >
       <span
         class="text-subtitle-2 font-weight-bold white--text black"
-        style="position:absolute; bottom:3px; right:5px; padding:1px"
+        style="position: absolute; bottom: 3px; right: 5px; padding: 1px"
       >
-      {{ duration }}sec
+        {{ duration }}sec
       </span>
       <v-overlay
         absolute
         :value="overlay"
         opacity="0"
+        style="cursor: pointer"
         @click="send"
-        style="cursor:pointer"
       >
         <v-icon large>mdi-play</v-icon>
       </v-overlay>
     </v-img>
-    <div class="text-truncate text-subtitle-1 ml-1 font-weight-bold">{{ title }}</div>
-    <div class="text-subtitle-2 text--secondary ml-1">views: {{ view_count }}</div>
-    <div class="text-subtitle-2 text--secondary ml-1">{{ formatted_created_at }}</div>
+    <div class="text-truncate text-subtitle-1 ml-1 font-weight-bold">
+      {{ title }}
+    </div>
+    <div class="text-subtitle-2 text--secondary ml-1">
+      views: {{ view_count }}
+    </div>
+    <div class="text-subtitle-2 text--secondary ml-1">
+      {{ formatted_created_at }}
+    </div>
     <v-card-actions>
       <v-spacer></v-spacer>
       <v-btn icon>
@@ -58,14 +64,13 @@ export default {
   computed: {
     formatted_created_at() {
       return moment(this.created_at).format('YYYY-MM-DD HH:mm')
-    }
+    },
   },
+  mounted() {},
   methods: {
-    send () {
+    send() {
       this.$emit('click', this.embed_url)
-    }
+    },
   },
-  mounted() {
-  }
 }
 </script>

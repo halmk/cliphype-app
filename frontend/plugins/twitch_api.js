@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from 'axios'
 
 const TwitchAPI = {
   // apiUrl: 'https://cliplist-ttv.herokuapp.com/api/twitch',
@@ -18,7 +18,7 @@ const TwitchAPI = {
       })
     } else {
       params.url = url
-			console.log(params, TwitchAPI.apiUrl)
+      console.log(params, TwitchAPI.apiUrl)
       return await axios.get(TwitchAPI.apiUrl, {
         params,
       })

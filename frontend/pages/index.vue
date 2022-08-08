@@ -15,11 +15,11 @@
 
 <script>
 export default {
-  head () {
+  name: 'AppIndexPage',
+  head() {
     return {
-      title: 'Home'
+      title: 'Home',
     }
   },
-  name: 'AppIndexPage',
 }
 </script>
