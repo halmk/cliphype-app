@@ -1,13 +1,13 @@
 <template>
   <v-row align="center">
-    <v-col class="grey lighten-3" cols="12" sm="4">
+    <v-container class="grey lighten-4">
+      <h1>
+        Search streamer whom you want to get clips.
+      </h1>
+    </v-container>
+    <v-col class="grey lighten-4" cols="12" sm="4">
       <v-container class="grey lighten-5">
         <StreamerSearchForm />
-      </v-container>
-    </v-col>
-    <v-col class="grey lighten-3" cols="12">
-      <v-container class="grey lighten-5">
-        <ClipListView />
       </v-container>
     </v-col>
   </v-row>
@@ -15,6 +15,11 @@
 
 <script>
 export default {
-    name: "AppPage",
+  name: "AppPage",
+  head () {
+    return {
+      title: 'App'
+    }
+  }
 }
 </script>
