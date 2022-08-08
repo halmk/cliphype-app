@@ -2,6 +2,7 @@
   <div>
     <v-text-field
       v-model="streamerId"
+      :error="error"
       label="Streamer ID"
       placeholder="shroud"
       append-outer-icon="mdi-magnify"
@@ -21,14 +22,30 @@ export default {
   name: 'StreamerSearchForm',
   data: () => ({
     streamerId: '',
+    error: false,
   }),
+  watch: {
+    streamerId () {
+      this.error = false
+    }
+  },
   methods: {
     moveStreamerPage() {
       console.log(this.$twitch.apiUrl)
       this.$twitch.getUserId(this.streamerId)
         .then((response) => {
           console.log(response)
-          this.$router.push(`/app/${this.streamerId}`)
+          const data = response.data.response.data
+          if (data.length === 0) {
+            console.log(data)
+            this.error = true
+          } else {
+            this.$router.push(`/app/${this.streamerId}`)
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+          this.error = true
         })
     },
   },
