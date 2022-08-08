@@ -14,6 +14,11 @@
 <script>
 export default {
   name: 'AppPage',
+  head () {
+    return {
+      title: this.streamer
+    }
+  },
   computed: {
     streamer () {
       return this.$route.params.streamer
