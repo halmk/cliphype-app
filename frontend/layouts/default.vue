@@ -85,5 +85,8 @@ export default {
       title: 'ClipHype',
     }
   },
+  mounted() {
+    this.$twitch.apiURL = `${this.$config.apiURL}/api/twitch`
+  },
 }
 </script>
