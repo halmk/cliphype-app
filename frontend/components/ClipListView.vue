@@ -55,7 +55,6 @@ export default {
   },
   data: () => ({
     dateRange: [moment().toISOString(), moment().toISOString()],
-    siteUrl: 'localhost',
     streamerId: '',
     startedAt: '',
     endedAt: '',
@@ -147,7 +146,7 @@ export default {
           for (let i = 0; i < data.length; i++) {
             data[i].modal_id = 'modal' + data[i].id
             data[i].modal_target = '#' + data[i].modal_id
-            data[i].embed_url += `&autoplay=false&parent=${this.siteUrl}`
+            data[i].embed_url += `&autoplay=false&parent=${this.$config.domain}`
             data[i].modal = false
             // clips[i].created_date = this.customformat(clips[i].created_at);
             // clips[i].created_epoch = this.getEpochTime(clips[i].created_at);
@@ -180,7 +179,7 @@ export default {
           for (let i = 0; i < data.length; i++) {
             data[i].modal_id = 'modal' + data[i].id
             data[i].modal_target = '#' + data[i].modal_id
-            data[i].embed_url += `&autoplay=false&parent=${this.siteUrl}`
+            data[i].embed_url += `&autoplay=false&parent=${this.$config.domain}`
             data[i].modal = false
             // data[i].created_date = this.customformat(data[i].created_at);
             // data[i].created_epoch = this.getEpochTime(data[i].created_at);
