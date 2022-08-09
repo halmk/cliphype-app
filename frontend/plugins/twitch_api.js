@@ -1,14 +1,13 @@
 import axios from 'axios'
 
 const TwitchAPI = {
-  apiUrl: 'https://api-cliphype.herokuapp.com/api/twitch',
-  // apiUrl: 'http://localhost:5000/api/twitch',
+  apiURL: '',
   clientId: '',
   token: '',
-  has_token: false,
+  hasToken: false,
 
   getRequest: async (url, params) => {
-    if (TwitchAPI.has_token) {
+    if (TwitchAPI.hasToken) {
       return await axios.get(url, {
         headers: {
           'Client-ID': TwitchAPI.clientId,
@@ -18,8 +17,8 @@ const TwitchAPI = {
       })
     } else {
       params.url = url
-      console.log(params, TwitchAPI.apiUrl)
-      return await axios.get(TwitchAPI.apiUrl, {
+      console.log(params, TwitchAPI.apiURL)
+      return await axios.get(TwitchAPI.apiURL, {
         params,
       })
     }
