@@ -86,6 +86,7 @@ export default {
     }
   },
   mounted() {
+    console.log(this.$config)
     this.$twitch.apiURL = `${this.$config.apiURL}/api/twitch`
   },
 }

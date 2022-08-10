@@ -4,7 +4,7 @@
       <v-col cols="12" lg="3">
         <h1>Clips</h1>
         <ClipDateRangePicker @input="updateDateRange" />
-        <v-btn @click="getClips">Get Clips</v-btn>
+        <v-btn :loading="loadingGetClips" @click="getClips">Get Clips</v-btn>
         <v-btn @click="getAfterClips">More</v-btn>
       </v-col>
       <v-col cols="12" lg="9">
@@ -64,6 +64,7 @@ export default {
     clipsAfter: '',
     clipDialog: false,
     embedClipUrl: '',
+    loadingGetClips: false,
   }),
   computed: {
     length() {
@@ -132,6 +133,7 @@ export default {
     },
 
     getClips() {
+      this.loadingGetClips = true
       console.log(
         'getClips params: ',
         this.streamerId,
@@ -153,9 +155,11 @@ export default {
           }
           this.clips = data
           this.clipsAfter = response.data.response.pagination.cursor
+          this.loadingGetClips = false
         })
         .catch(function (error) {
           console.log(error)
+          this.loadingGetClips = false
         })
     },
 

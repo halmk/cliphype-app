@@ -2,6 +2,7 @@
   <div>
     <v-text-field
       v-model="streamerId"
+      :loading="loading"
       :error="error"
       label="Streamer ID"
       placeholder="shroud"
@@ -22,6 +23,7 @@ export default {
   name: 'StreamerSearchForm',
   data: () => ({
     streamerId: '',
+    loading: false,
     error: false,
   }),
   watch: {
@@ -32,10 +34,11 @@ export default {
   mounted() {},
   methods: {
     moveStreamerPage() {
-      console.log(this.$twitch.apiUrl)
+      this.loading = true
       this.$twitch
         .getUserId(this.streamerId)
         .then((response) => {
+          this.loading = false
           console.log(response)
           const data = response.data.response.data
           if (data.length === 0) {
@@ -47,6 +50,7 @@ export default {
         })
         .catch((error) => {
           console.log(error)
+          this.loading = false
           this.error = true
         })
     },
