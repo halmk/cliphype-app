@@ -1,0 +1,85 @@
+<template>
+  <div>
+    <v-row>
+      <v-col cols="12">
+        <h2>Archives</h2>
+        <v-row justify="center" align="center" class="text-center">
+          <v-pagination
+            v-model="page"
+            :length="length"
+            :total-visible="7"
+          ></v-pagination>
+        </v-row>
+        <v-row dense class="mt-4">
+          <v-col
+            v-for="video in shownVideos"
+            :key="video.id"
+            :cols="bkPoint.flex"
+          >
+            <VideoCard v-bind="video" @click="send" />
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
+  </div>
+</template>
+
+<script>
+import moment from 'moment'
+export default {
+  name: 'PickDateRangeByVideo',
+  props: {
+    videos: Array,
+  },
+  data: () => ({
+    dateRange: [moment().toISOString(), moment().toISOString()],
+    page: 1,
+  }),
+  computed: {
+    length() {
+      return parseInt(this.videos.length / this.size)
+    },
+    size() {
+      return 12 / this.bkPoint.flex
+    },
+    shownVideos() {
+      const shownVideos = []
+      for (
+        let i = (this.page - 1) * this.size;
+        i < this.page * this.size;
+        i++
+      ) {
+        if (i >= this.videos.length) return shownVideos
+        shownVideos.push(this.videos[i])
+      }
+      return shownVideos
+    },
+    bkPoint() {
+      const bkPt = this.$vuetify.breakpoint
+      const point = {
+        flex: 3,
+      }
+      switch (bkPt.name) {
+        case 'md':
+          point.flex = 4
+          break
+        case 'sm':
+          point.flex = 4
+          break
+        case 'xs':
+          point.flex = 6
+          break
+        default:
+          break
+      }
+      return point
+    },
+  },
+  mounted() {},
+  methods: {
+    send(dateRange) {
+      this.$emit('click', dateRange)
+    },
+  },
+}
+</script>

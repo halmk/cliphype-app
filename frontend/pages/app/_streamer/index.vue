@@ -1,14 +1,16 @@
 <template>
-  <v-row align="center" class="grey lighten-5">
-    <v-col class="" cols="12">
-      <v-container class="">
-        <h1>
-          {{ streamer }}
-        </h1>
-        <ClipListView :streamer="streamer" />
-      </v-container>
-    </v-col>
-  </v-row>
+  <div>
+    <v-row align="center" class="grey lighten-4">
+      <v-col class="" cols="12">
+        <v-container class="">
+          <h1>
+            {{ streamer }}
+          </h1>
+          <FilterStreamerClips :streamer="streamer" />
+        </v-container>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>
@@ -23,6 +25,10 @@ export default {
     streamer() {
       return this.$route.params.streamer
     },
+  },
+  mounted() {
+    console.log(this.$config)
+    this.$twitch.apiURL = `${this.$config.apiURL}/api/twitch`
   },
 }
 </script>
