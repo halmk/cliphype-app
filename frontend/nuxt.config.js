@@ -1,6 +1,8 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
+  target: 'static',
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - cliphype',
@@ -74,6 +76,10 @@ export default {
   publicRuntimeConfig: {
     domain: process.env.DOMAIN || 'localhost',
     apiURL: process.env.API_URL || 'http://localhost:5000',
+  },
+
+  generate: {
+    fallback: true,
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
