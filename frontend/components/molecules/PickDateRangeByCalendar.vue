@@ -1,31 +1,39 @@
 <template>
-  <v-menu
-    ref="menu"
-    v-model="menu"
-    :close-on-content-click="false"
-    :return-value.sync="dateRange"
-    transition="scale-transition"
-    offset-y
-    min-width="auto"
-  >
-    <template #activator="{ on, attrs }">
-      <v-text-field
-        v-model="dateRangeText"
-        label="Select the range to get clips"
-        prepend-icon="mdi-calendar"
-        readonly
-        v-bind="attrs"
-        v-on="on"
-      ></v-text-field>
-    </template>
-    <v-date-picker v-model="dateRange" no-title scrollable range @input="send">
-      <v-spacer></v-spacer>
-      <v-btn text color="primary" @click="menu = false"> Cancel </v-btn>
-      <v-btn text color="primary" @click="$refs.menu.save(dateRange)">
-        OK
-      </v-btn>
-    </v-date-picker>
-  </v-menu>
+  <div>
+    <h3>Select the range from calendar</h3>
+    <v-menu
+      ref="menu"
+      v-model="menu"
+      :close-on-content-click="false"
+      :return-value.sync="dateRange"
+      transition="scale-transition"
+      offset-y
+      min-width="auto"
+    >
+      <template #activator="{ on, attrs }">
+        <v-text-field
+          v-model="dateRangeText"
+          prepend-icon="mdi-calendar"
+          readonly
+          v-bind="attrs"
+          v-on="on"
+        ></v-text-field>
+      </template>
+      <v-date-picker
+        v-model="dateRange"
+        no-title
+        scrollable
+        range
+        @input="send"
+      >
+        <v-spacer></v-spacer>
+        <v-btn text color="primary" @click="menu = false"> Cancel </v-btn>
+        <v-btn text color="primary" @click="$refs.menu.save(dateRange)">
+          OK
+        </v-btn>
+      </v-date-picker>
+    </v-menu>
+  </div>
 </template>
 
 <script>

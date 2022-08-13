@@ -2,15 +2,17 @@
   <div>
     <v-row class="mt-1">
       <v-col cols="12">
-        <div class="pa-1 mt-4 grey lighten-5">
+        <div class="px-3 pt-3 mt-4 rounded-lg elevation-1 grey lighten-5">
           <PickDateRangeByCalendar @input="updateDateRange" />
         </div>
-        <div class="px-2 pb-2 mt-5 grey lighten-5">
+        <div class="px-2 pb-2 mt-5 rounded-lg elevation-1 grey lighten-5">
           <PickDateRangeByVideo :videos="videos" @click="updateDateRange" />
         </div>
         <div class="mt-4">
-          <span class="pa-1 grey lighten-5">
-            Selected datetime range : {{ dateRangeText }}
+          <span
+            class="text-h6 font-weight-bold pa-2 rounded-lg elevation-1 grey lighten-5"
+          >
+            {{ dateRangeText }}
           </span>
         </div>
         <div class="mt-3">
@@ -22,7 +24,7 @@
           >
           <v-btn class="grey lighten-5" @click="getAfterClips">More</v-btn>
         </div>
-        <div class="pt-1 pb-4 px-2 mt-5 grey lighten-5">
+        <div class="pt-1 pb-4 px-2 mt-5 rounded-lg elevation-1 grey lighten-5">
           <h1>Clips</h1>
           <ListClips :clips="clips" @click="openClipDialog" />
         </div>
