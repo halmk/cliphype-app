@@ -8,8 +8,17 @@
       ></v-pagination>
     </v-row>
     <v-row dense class="mt-4">
-      <v-col v-for="clip in shownClips" :key="clip.id" :cols="bkPoint.flex">
-        <ClipCard v-bind="clip" @click="send" />
+      <v-col
+        v-for="(clip, index) in shownClips"
+        :key="clip.id"
+        :cols="bkPoint.flex"
+      >
+        <ClipCard
+          v-bind="clip"
+          :index="index"
+          @click="send"
+          @clickPlus="clickPlus"
+        />
       </v-col>
     </v-row>
     <v-row justify="center" align="center" class="text-center">
@@ -79,6 +88,9 @@ export default {
   methods: {
     send(embedURL) {
       this.$emit('click', embedURL)
+    },
+    clickPlus(index) {
+      this.$emit('clickPlus', index)
     },
   },
 }
