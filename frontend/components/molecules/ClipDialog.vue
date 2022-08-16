@@ -10,15 +10,17 @@
       :src="embedClipURL"
       :height="bkPoint.dialogHeight"
       :width="bkPoint.dialogWidth"
+      frameborder="0"
       allowfullscreen
     >
     </iframe>
+    <slot></slot>
   </v-dialog>
 </template>
 
 <script>
 export default {
-  name: 'ClipDateRangePicker',
+  name: 'ClipDialog',
   props: {
     embedClipURL: String,
     showDialog: Boolean,
