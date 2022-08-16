@@ -2,8 +2,8 @@
   <div>
     <v-row>
       <v-col cols="12">
-        <h2>Archives</h2>
-        <v-row justify="center" align="center" class="text-center">
+        <h3>Select the range from archives</h3>
+        <v-row justify="center" align="center" class="mt-2 text-center">
           <v-pagination
             v-model="page"
             :length="length"

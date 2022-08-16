@@ -2,15 +2,17 @@
   <div>
     <v-row class="mt-1">
       <v-col cols="12">
-        <div class="pa-1 mt-4 grey lighten-5">
+        <div class="px-3 pt-3 mt-4 rounded-lg elevation-1 grey lighten-5">
           <PickDateRangeByCalendar @input="updateDateRange" />
         </div>
-        <div class="px-2 pb-2 mt-5 grey lighten-5">
+        <div class="px-2 pb-2 mt-5 rounded-lg elevation-1 grey lighten-5">
           <PickDateRangeByVideo :videos="videos" @click="updateDateRange" />
         </div>
         <div class="mt-4">
-          <span class="pa-1 grey lighten-5">
-            Selected datetime range : {{ dateRangeText }}
+          <span
+            class="text-h6 font-weight-bold pa-2 rounded-lg elevation-1 grey lighten-5"
+          >
+            {{ dateRangeText }}
           </span>
         </div>
         <div class="mt-3">
@@ -22,9 +24,13 @@
           >
           <v-btn class="grey lighten-5" @click="getAfterClips">More</v-btn>
         </div>
-        <div class="pt-1 pb-4 px-2 mt-5 grey lighten-5">
+        <div class="pt-1 pb-4 px-2 mt-5 rounded-lg elevation-1 grey lighten-5">
           <h1>Clips</h1>
-          <ListClips :clips="clips" @click="openClipDialog" />
+          <ListClips
+            :clips="clips"
+            @click="openClipDialog"
+            @clickPlus="addClipToPlaylist"
+          />
         </div>
       </v-col>
     </v-row>
@@ -32,6 +38,13 @@
       :show-dialog="showDialog"
       :embed-clip-u-r-l="embedClipURL"
       @close="showDialog = !showDialog"
+    />
+    <ClipPlaylist
+      :clips="playlistClips"
+      @clickRemove="removeClip"
+      @clickPrev="swapPrevClip"
+      @clickNext="swapNextClip"
+      @clickSort="sortPlaylistClipsByCreatedAt"
     />
   </div>
 </template>
@@ -47,6 +60,7 @@ export default {
     dateRange: [moment().toISOString(), moment().toISOString()],
     streamerId: '',
     clips: [],
+    playlistClips: [],
     clipsAfter: '',
     videos: [],
     showDialog: false,
@@ -76,9 +90,9 @@ export default {
     async getStreamerId() {
       try {
         const response = await this.$twitch.getUserId(this.streamer)
-        console.log(response.data)
+        // console.log(response.data)
         const data = response.data.response.data
-        console.log(data)
+        // console.log(data)
         this.streamerId = data[0].id
       } catch (error) {
         console.log(error)
@@ -99,13 +113,14 @@ export default {
           this.dateRange[0],
           this.dateRange[1]
         )
-        console.log(response)
+        // console.log(response)
         const data = response.data.response.data
         for (let i = 0; i < data.length; i++) {
           data[i].modal_id = 'modal' + data[i].id
           data[i].modal_target = '#' + data[i].modal_id
-          data[i].embed_url += `&autoplay=false&parent=${this.$config.domain}`
+          data[i].embed_url += `&autoplay=true&parent=${this.$config.domain}`
           data[i].modal = false
+          data[i].created_epoch = moment(data[i].created_at).unix()
           // clips[i].created_date = this.customformat(clips[i].created_at);
           // clips[i].created_epoch = this.getEpochTime(clips[i].created_at);
         }
@@ -135,7 +150,7 @@ export default {
         for (let i = 0; i < data.length; i++) {
           data[i].modal_id = 'modal' + data[i].id
           data[i].modal_target = '#' + data[i].modal_id
-          data[i].embed_url += `&autoplay=false&parent=${this.$config.domain}`
+          data[i].embed_url += `&autoplay=true&parent=${this.$config.domain}`
           data[i].modal = false
           // data[i].created_date = this.customformat(data[i].created_at);
           // data[i].created_epoch = this.getEpochTime(data[i].created_at);
@@ -155,7 +170,7 @@ export default {
       console.log('getVideos params: ', this.streamerId)
       try {
         const response = await this.$twitch.getVideos(this.streamerId)
-        console.log(response)
+        // console.log(response)
         const data = response.data.response.data
         for (let i = 0; i < data.length; i++) {
           const thumbnailUrl = data[i].thumbnail_url
@@ -179,6 +194,48 @@ export default {
       this.embedClipURL = embedURL
       this.showDialog = true
     },
+
+    removeClip(index) {
+      this.playlistClips.splice(index, 1)
+    },
+
+    swapPrevClip(index) {
+      if (index > 0) {
+        this.playlistClips.splice(
+          index - 1,
+          2,
+          this.playlistClips[index],
+          this.playlistClips[index - 1]
+        )
+      }
+    },
+
+    swapNextClip(index) {
+      if (index + 1 < this.clips.length) {
+        this.playlistClips.splice(
+          index,
+          2,
+          this.playlistClips[index + 1],
+          this.playlistClips[index]
+        )
+      }
+    },
+
+    addClipToPlaylist(index) {
+      this.playlistClips.push(this.clips[index])
+    },
+
+    sortPlaylistClipsByCreatedAt() {
+      this.playlistClips.sort((a, b) => a.created_epoch - b.created_epoch)
+    },
   },
 }
 </script>
+
+<style>
+.v-dialog {
+  background-color: black;
+  box-shadow: none;
+  border: 0;
+}
+</style>

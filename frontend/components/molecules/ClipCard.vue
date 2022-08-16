@@ -33,7 +33,7 @@
     </div>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn icon>
+      <v-btn icon @click="clickPlus">
         <v-icon>mdi-plus</v-icon>
       </v-btn>
     </v-card-actions>
@@ -45,6 +45,7 @@ import moment from 'moment'
 export default {
   name: 'ClipCard',
   props: {
+    index: Number,
     created_at: String,
     duration: Number,
     embed_url: String,
@@ -70,6 +71,9 @@ export default {
   methods: {
     send() {
       this.$emit('click', this.embed_url)
+    },
+    clickPlus() {
+      this.$emit('clickPlus', this.index)
     },
   },
 }
