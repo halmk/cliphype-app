@@ -1,8 +1,8 @@
 <template>
   <v-card outlined tile class="grey lighten-4 border-color">
     <v-img
-      lazy-src="https://picsum.photos/id/149/10/6?blur=10"
       :src="thumbnail_url"
+      :aspect-ratio="16 / 9"
       @mouseover="overlay = true"
       @mouseleave="overlay = false"
     >
