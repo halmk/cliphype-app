@@ -13,7 +13,13 @@
         :key="clip.id"
         :cols="bkPoint.flex"
       >
+        <v-skeleton-loader
+          v-if="!showCard"
+          type="image, list-item-three-line, actions"
+        >
+        </v-skeleton-loader>
         <ClipCard
+          v-show="showCard"
           v-bind="clip"
           :index="index"
           @click="send"
@@ -39,6 +45,7 @@ export default {
   },
   data: () => ({
     page: 1,
+    showCard: true,
   }),
   computed: {
     length() {
@@ -84,13 +91,21 @@ export default {
       return point
     },
   },
-  mounted() {},
+  mounted() {
+    this.loading()
+  },
   methods: {
     send(embedURL) {
       this.$emit('click', embedURL)
     },
     clickPlus(index) {
       this.$emit('clickPlus', index)
+    },
+    loading() {
+      this.showCard = false
+      setTimeout(() => {
+        this.showCard = true
+      }, 1500)
     },
   },
 }

@@ -16,7 +16,11 @@
             :key="video.id"
             :cols="bkPoint.flex"
           >
-            <VideoCard v-bind="video" @click="send" />
+            <v-skeleton-loader
+              v-if="!showCard"
+              type="image, list-item-three-line"
+            ></v-skeleton-loader>
+            <VideoCard v-show="showCard" v-bind="video" @click="send" />
           </v-col>
         </v-row>
       </v-col>
@@ -34,6 +38,7 @@ export default {
   data: () => ({
     dateRange: [moment().toISOString(), moment().toISOString()],
     page: 1,
+    showCard: true,
   }),
   computed: {
     length() {
@@ -75,10 +80,18 @@ export default {
       return point
     },
   },
-  mounted() {},
+  mounted() {
+    this.loading()
+  },
   methods: {
     send(dateRange) {
       this.$emit('click', dateRange)
+    },
+    loading() {
+      this.showCard = false
+      setTimeout(() => {
+        this.showCard = true
+      }, 1500)
     },
   },
 }
