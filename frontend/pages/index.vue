@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row justify="center" align="center">
-      <v-col class="grey lighten-3" cols="12" sm="8" md="10" lg="12">
+      <v-col class="" cols="12" sm="10" lg="8">
         <About />
       </v-col>
     </v-row>
