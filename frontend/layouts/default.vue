@@ -34,25 +34,13 @@
       <v-spacer />
       <StreamerSearchForm />
       <v-spacer />
-      <v-btn icon @click.stop="rightDrawer = !rightDrawer">
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
+      <HeaderAccount />
     </v-app-bar>
-    <v-main>
+    <v-main class="grey lighten-3">
       <v-container>
         <Nuxt />
       </v-container>
     </v-main>
-    <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>
-      <v-list>
-        <v-list-item @click.native="right = !right">
-          <v-list-item-action>
-            <v-icon light> mdi-repeat </v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
     <v-footer :absolute="!fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
@@ -78,6 +66,11 @@ export default {
           title: 'App',
           to: '/app',
         },
+        {
+          icon: 'mdi-account',
+          title: 'Account',
+          to: '/account',
+        },
       ],
       miniVariant: false,
       right: true,
@@ -86,7 +79,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$config)
     this.$twitch.apiURL = `${this.$config.apiURL}/api/twitch`
   },
 }

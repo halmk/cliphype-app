@@ -89,7 +89,7 @@ export default {
 
     async getStreamerId() {
       try {
-        const response = await this.$twitch.getUserId(this.streamer)
+        const response = await this.$twitch.app.getUserId(this.streamer)
         // console.log(response.data)
         const data = response.data.response.data
         // console.log(data)
@@ -108,7 +108,7 @@ export default {
         this.dateRange[1]
       )
       try {
-        const response = await this.$twitch.getClips(
+        const response = await this.$twitch.app.getClips(
           this.streamerId,
           this.dateRange[0],
           this.dateRange[1]
@@ -139,7 +139,7 @@ export default {
         return
       }
       try {
-        const response = await this.$twitch.getAfterClips(
+        const response = await this.$twitch.app.getAfterClips(
           this.streamerId,
           this.dateRange[0],
           this.dateRange[1],
@@ -169,7 +169,7 @@ export default {
     async getVideos() {
       console.log('getVideos params: ', this.streamerId)
       try {
-        const response = await this.$twitch.getVideos(this.streamerId)
+        const response = await this.$twitch.app.getVideos(this.streamerId)
         // console.log(response)
         const data = response.data.response.data
         for (let i = 0; i < data.length; i++) {
