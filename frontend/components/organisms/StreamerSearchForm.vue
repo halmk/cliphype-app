@@ -35,7 +35,7 @@ export default {
   methods: {
     moveStreamerPage() {
       this.loading = true
-      this.$twitch
+      this.$twitch.app
         .getUserId(this.streamerId)
         .then((response) => {
           this.loading = false
