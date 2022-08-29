@@ -6,28 +6,11 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
   name: 'TwitchSocialLogin',
   methods: {
-    async login() {
-      try {
-        const response = await axios.get(
-          `${this.$config.apiURL}/accounts/twitch/login`
-        )
-        const state = response.data.state
-        const maxAge = response.data.maxAge
-        const authURL = response.data.redirect
-        this.$cookies.set('oauth2_state', state, {
-          path: '/',
-          maxAge,
-          httpOnly: false,
-          secure: true,
-        })
-        window.location.href = authURL
-      } catch (error) {
-        console.log(error)
-      }
+    login() {
+      window.location.href = `${this.$config.apiURL}/accounts/twitch/login`
     },
   },
 }
