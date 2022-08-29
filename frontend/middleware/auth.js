@@ -1,5 +1,5 @@
 export default function ({ redirect, store, route, app }) {
-  store.commit('auth/setSession', app.$cookies.get('session'))
+  store.commit('auth/setSession', app.$cookies.get('jwt'))
   const isLogined = store.getters['auth/isLogined']
 
   if (!isLogined && route.path !== '/account/login') {

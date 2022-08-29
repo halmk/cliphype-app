@@ -46,6 +46,7 @@ export default {
   },
   async mounted() {
     this.$twitch.apiURL = `${this.$config.apiURL}/api/twitch`
+    this.$twitch.user.token = this.$cookies.get('jwt')
     await this.GetUserInfo()
   },
   methods: {
