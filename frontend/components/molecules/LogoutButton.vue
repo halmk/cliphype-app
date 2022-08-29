@@ -6,11 +6,29 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'LogoutButton',
   methods: {
-    logout() {
-      window.location.href = `${this.$config.apiURL}/accounts/logout`
+    async logout() {
+      try {
+        await axios.get(`${this.$config.apiURL}/accounts/logout`, {
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get('jwt')}`,
+          },
+        })
+        this.$cookies.set('jwt', '', {
+          maxAge: -1,
+          path: '/',
+          httpOnly: false,
+          secure: false,
+        })
+        this.$store.commit('auth/setSession', this.$cookies.get('jwt'))
+        this.$router.push('/')
+      } catch (error) {
+        console.log(error)
+      }
     },
   },
 }

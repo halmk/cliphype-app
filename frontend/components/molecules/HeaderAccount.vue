@@ -15,12 +15,14 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'HeaderAccount',
-  data: () => ({
-    isLogined: false,
-  }),
+  data: () => ({}),
   computed: {
+    ...mapGetters({
+      isLogined: 'auth/isLogined',
+    }),
     showText() {
       const bkPt = this.$vuetify.breakpoint
       let showText = true
@@ -35,8 +37,7 @@ export default {
     },
   },
   mounted() {
-    this.$store.commit('auth/setSession', this.$cookies.get('session'))
-    this.isLogined = this.$store.getters['auth/isLogined']
+    this.$store.commit('auth/setSession', this.$cookies.get('jwt'))
   },
   methods: {},
 }
