@@ -22,6 +22,7 @@ export default {
           path: '/',
           maxAge,
           httpOnly: false,
+          sameSite: 'none',
           secure: true,
         })
         window.location.href = authURL
