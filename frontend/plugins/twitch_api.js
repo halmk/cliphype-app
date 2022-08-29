@@ -176,12 +176,16 @@ const TwitchAPI = {
       return TwitchAPI.apiURL + '/user'
     },
 
+    token: '',
+
     getRequest: async (url, params) => {
       params.url = url
       console.log(params, TwitchAPI.user.apiURL())
       return await axios.get(TwitchAPI.user.apiURL(), {
         params,
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${TwitchAPI.user.token}`,
+        },
       })
     },
 
