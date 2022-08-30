@@ -73,7 +73,7 @@ export default {
       this.$emit('click', this.embed_url)
     },
     clickPlus() {
-      this.$emit('clickPlus', this.index)
+      this.$emit('clickPlus', this.id)
     },
   },
 }
