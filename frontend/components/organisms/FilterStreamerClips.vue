@@ -2,29 +2,29 @@
   <div>
     <v-row class="mt-1">
       <v-col cols="12">
-        <div class="px-3 pt-3 mt-4 rounded-lg elevation-1 grey lighten-5">
-          <PickDateRangeByCalendar @input="updateDateRange" />
-        </div>
-        <div class="px-2 pb-2 mt-5 rounded-lg elevation-1 grey lighten-5">
-          <PickDateRangeByVideo :videos="videos" @click="updateDateRange" />
+        <div class="pb-3 grey darken-4">
+          <v-col
+            sm="6"
+            md="4"
+            lg="3"
+            class="px-1 mx-1 pt-3 rounded-lg elevation-1"
+          >
+            <PickDateRangeByCalendar @input="updateDateRange" />
+          </v-col>
+          <div class="px-2 pb-2 mt-5 rounded-lg elevation-1">
+            <PickDateRangeByVideo :videos="videos" @click="updateDateRange" />
+          </div>
         </div>
         <div class="mt-4">
-          <span
-            class="text-h6 font-weight-bold pa-2 rounded-lg elevation-1 grey lighten-5"
-          >
+          <span class="text-h6 font-weight-bold pa-2 rounded-lg elevation-1">
             {{ dateRangeText }}
           </span>
         </div>
         <div class="mt-3">
-          <v-btn
-            class="grey lighten-5"
-            :loading="loadingGetClips"
-            @click="getClips"
-            >Get Clips</v-btn
-          >
-          <v-btn class="grey lighten-5" @click="getAfterClips">More</v-btn>
+          <v-btn :loading="loadingGetClips" @click="getClips">Get Clips</v-btn>
+          <v-btn @click="getAfterClips">More</v-btn>
         </div>
-        <div class="pt-1 pb-4 px-2 mt-5 rounded-lg elevation-1 grey lighten-5">
+        <div class="pt-1 pb-4 px-2 mt-5 rounded-lg elevation-1">
           <h1>Clips</h1>
           <ListClips
             :clips="clips"
@@ -39,13 +39,15 @@
       :embed-clip-u-r-l="embedClipURL"
       @close="showDialog = !showDialog"
     />
-    <ClipPlaylist
-      :clips="playlistClips"
-      @clickRemove="removeClip"
-      @clickPrev="swapPrevClip"
-      @clickNext="swapNextClip"
-      @clickSort="sortPlaylistClipsByCreatedAt"
-    />
+    <div class="mt-4">
+      <ClipPlaylist
+        :clips="playlistClips"
+        @clickRemove="removeClip"
+        @clickPrev="swapPrevClip"
+        @clickNext="swapNextClip"
+        @clickSort="sortPlaylistClipsByCreatedAt"
+      />
+    </div>
   </div>
 </template>
 

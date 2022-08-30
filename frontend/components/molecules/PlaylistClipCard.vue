@@ -1,10 +1,5 @@
 <template>
-  <v-card
-    :max-width="maxWidth"
-    outlined
-    tile
-    class="grey lighten-4 border-color"
-  >
+  <v-card :max-width="maxWidth" tile>
     <v-img
       lazy-src="https://picsum.photos/id/149/10/6?blur=10"
       :src="thumbnail_url"
