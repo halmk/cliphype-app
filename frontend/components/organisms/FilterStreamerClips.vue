@@ -221,8 +221,9 @@ export default {
       }
     },
 
-    addClipToPlaylist(index) {
-      this.playlistClips.push(this.clips[index])
+    addClipToPlaylist(id) {
+      const clip = this.clips.filter((value) => value.id === id)[0]
+      this.playlistClips.push(clip)
     },
 
     sortPlaylistClipsByCreatedAt() {
