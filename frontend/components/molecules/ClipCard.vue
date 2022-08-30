@@ -1,5 +1,5 @@
 <template>
-  <v-card outlined tile class="grey lighten-4 border-color">
+  <v-card tile>
     <v-img
       :src="thumbnail_url"
       :aspect-ratio="16 / 9"

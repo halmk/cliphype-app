@@ -36,7 +36,7 @@
       <v-spacer />
       <HeaderAccount />
     </v-app-bar>
-    <v-main class="grey lighten-3">
+    <v-main>
       <v-container>
         <Nuxt />
       </v-container>
