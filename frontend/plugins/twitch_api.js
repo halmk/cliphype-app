@@ -26,10 +26,10 @@ const TwitchAPI = {
     },
 
     /* ユーザがフォローしている配信者を取得する */
-    getFollows: async (clientId) => {
+    getFollows: async (userID) => {
       const url = 'https://api.twitch.tv/helix/users/follows'
       const params = {
-        from_id: clientId,
+        from_id: userID,
         first: 100,
       }
 
@@ -37,10 +37,10 @@ const TwitchAPI = {
     },
 
     /* ユーザがフォローしている配信者を取得する */
-    getAfterFollows: async (clientId, after) => {
+    getAfterFollows: async (userID, after) => {
       const url = 'https://api.twitch.tv/helix/users/follows'
       const params = {
-        from_id: clientId,
+        from_id: userID,
         first: 100,
         after,
       }
