@@ -2,7 +2,6 @@
   <v-dialog
     :value="showDialog"
     :width="bkPoint.dialogWidth"
-    hide-overlay
     @click:outside="close"
     @keydown="close"
   >
