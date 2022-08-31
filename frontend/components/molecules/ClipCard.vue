@@ -17,7 +17,7 @@
         :value="overlay"
         opacity="0"
         style="cursor: pointer"
-        @click="send"
+        @click.stop="send"
       >
         <v-icon large>mdi-play</v-icon>
       </v-overlay>
