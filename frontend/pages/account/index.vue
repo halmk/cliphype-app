@@ -11,7 +11,7 @@
 <script>
 export default {
   name: 'AccountIndexPage',
-  middleware: 'auth',
+  middleware: ['auth', 'user'],
   head() {
     return {
       title: 'Home',
