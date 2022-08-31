@@ -25,6 +25,7 @@ export default {
           secure: false,
         })
         this.$store.commit('auth/setSession', this.$cookies.get('jwt'))
+        this.$store.commit('user/init')
         this.$router.push('/')
       } catch (error) {
         console.log(error)

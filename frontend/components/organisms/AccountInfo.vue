@@ -2,15 +2,14 @@
   <div>
     <v-row>
       <v-col cols="12" sm="2" lg="1">
-        <v-img :src="user.profile_image_url" max-height="300" max-width="300">
-        </v-img>
+        <v-img :src="profileImage" max-height="300" max-width="300"> </v-img>
       </v-col>
       <v-col cols="12" sm="10">
-        <h3>Email: {{ user.email }}</h3>
+        <h3>Email: {{ email }}</h3>
         <h3>
           Login:
           <a :href="channelURL">
-            {{ user.login }}
+            {{ username }}
           </a>
         </h3>
       </v-col>
@@ -32,33 +31,21 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'AccountInfo',
   data: () => ({
-    user: {},
     loading: false,
     error: false,
   }),
   computed: {
+    ...mapState({
+      username: (state) => state.user.name,
+      email: (state) => state.user.email,
+      profileImage: (state) => state.user.profileImage,
+    }),
     channelURL() {
-      return `https://twitch.tv/${this.user.login}`
-    },
-  },
-  async mounted() {
-    this.$twitch.apiURL = `${this.$config.apiURL}/api/twitch`
-    this.$twitch.user.token = this.$cookies.get('jwt')
-    await this.GetUserInfo()
-  },
-  methods: {
-    async GetUserInfo() {
-      try {
-        const response = await this.$twitch.user.getUser()
-        console.log(response)
-        const data = response.data.response
-        this.user = data
-      } catch (error) {
-        console.log(error)
-      }
+      return `https://twitch.tv/${this.username}`
     },
   },
 }
