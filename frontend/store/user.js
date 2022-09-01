@@ -70,13 +70,31 @@ export const actions = {
     this.$twitch.user.token = this.$cookies.get('jwt')
     let follows = []
     try {
-      const responseFollows = await this.$twitch.app.getFollows(state.id)
-      follows = responseFollows.data.response.data
+      let after = ''
+      do {
+        if (after === '') {
+          const responseFollows = await this.$twitch.app.getFollows(state.id)
+          after = responseFollows.data.response.pagination.cursor
+          follows = responseFollows.data.response.data
+        } else {
+          const responseFollows = await this.$twitch.app.getAfterFollows(
+            state.id,
+            after
+          )
+          after = responseFollows.data.response.pagination.cursor
+          follows = follows.concat(responseFollows.data.response.data)
+        }
+      } while (after)
       const followIDs = follows.map((value) => value.to_id)
-      const responseUsers = await this.$twitch.app.getUsers(followIDs)
-      const users = responseUsers.data.response.data
+      let users = []
+      while (followIDs.length) {
+        const part = followIDs.splice(0, 100)
+        const responseUsers = await this.$twitch.app.getUsers(part)
+        users = users.concat(responseUsers.data.response.data)
+      }
       follows.forEach((follow) => {
         follow.to = `/app/${follow.to_login}`
+        follow.isFavorite = false
         const user = users.filter((user) => user.id === follow.to_id)
         if (user.length === 1) {
           follow.icon = user[0].profile_image_url
