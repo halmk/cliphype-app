@@ -43,6 +43,9 @@ export const mutations = {
   setFollows(state, follows) {
     state.follows = follows
   },
+  alterFavorite(state, index) {
+    state.follows[index].isFavorite = !state.follows[index].isFavorite
+  },
 }
 
 export const actions = {
