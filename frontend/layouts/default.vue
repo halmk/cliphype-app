@@ -25,7 +25,6 @@
         </v-list-item>
       </v-list>
       <v-divider></v-divider>
-      <div class="mt-3 ml-4">Follow channels</div>
       <ListUserFollows />
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>

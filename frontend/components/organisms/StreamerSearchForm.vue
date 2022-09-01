@@ -39,10 +39,8 @@ export default {
         .getUserId(this.streamerId)
         .then((response) => {
           this.loading = false
-          console.log(response)
           const data = response.data.response.data
           if (data.length === 0) {
-            console.log(data)
             this.error = true
           } else {
             this.$router.push(`/app/${this.streamerId}`)

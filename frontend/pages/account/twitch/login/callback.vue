@@ -13,7 +13,6 @@ export default {
     }
   },
   async mounted() {
-    console.log(this.$route.query)
     const params = this.$route.query
     try {
       const response = await axios.get(

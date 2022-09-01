@@ -92,9 +92,7 @@ export default {
     async getStreamerId() {
       try {
         const response = await this.$twitch.app.getUserId(this.streamer)
-        // console.log(response.data)
         const data = response.data.response.data
-        // console.log(data)
         this.streamerId = data[0].id
       } catch (error) {
         console.log(error)
@@ -103,19 +101,12 @@ export default {
 
     async getClips() {
       this.loadingGetClips = true
-      console.log(
-        'getClips params: ',
-        this.streamerId,
-        this.dateRange[0],
-        this.dateRange[1]
-      )
       try {
         const response = await this.$twitch.app.getClips(
           this.streamerId,
           this.dateRange[0],
           this.dateRange[1]
         )
-        // console.log(response)
         const data = response.data.response.data
         for (let i = 0; i < data.length; i++) {
           data[i].modal_id = 'modal' + data[i].id
@@ -135,7 +126,6 @@ export default {
     },
 
     async getAfterClips() {
-      // console.log("after : " + this.clipsAfter);
       if (!this.clipsAfter) {
         alert('No more clips!')
         return
@@ -147,7 +137,6 @@ export default {
           this.dateRange[1],
           this.clipsAfter
         )
-        // console.log(response);
         const data = response.data.response.data
         for (let i = 0; i < data.length; i++) {
           data[i].modal_id = 'modal' + data[i].id
@@ -163,16 +152,13 @@ export default {
         }
         this.clipsAfter = response.data.response.pagination.cursor
       } catch (error) {
-        // console.log("getAfterClips:失敗");
         console.log(error)
       }
     },
 
     async getVideos() {
-      console.log('getVideos params: ', this.streamerId)
       try {
         const response = await this.$twitch.app.getVideos(this.streamerId)
-        // console.log(response)
         const data = response.data.response.data
         for (let i = 0; i < data.length; i++) {
           const thumbnailUrl = data[i].thumbnail_url
