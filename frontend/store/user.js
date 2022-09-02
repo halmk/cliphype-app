@@ -4,7 +4,7 @@ export const state = () => ({
   id: null,
   email: null,
   profileImage: null,
-  follows: null,
+  follows: [],
 })
 
 export const getters = {
@@ -23,7 +23,7 @@ export const mutations = {
     state.id = null
     state.email = null
     state.profileImage = null
-    state.follows = null
+    state.follows = []
   },
   setName(state, name) {
     state.name = name
