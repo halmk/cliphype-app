@@ -83,13 +83,13 @@ export default {
       title: 'ClipHype',
     }
   },
-  mounted() {
-    this.$twitch.apiURL = `${this.$config.apiURL}/api/twitch`
-  },
   computed: {
     ...mapGetters({
       isExistUser: 'user/isExistUser',
     }),
+  },
+  mounted() {
+    this.$twitch.apiURL = `${this.$config.apiURL}/api/twitch`
   },
 }
 </script>
