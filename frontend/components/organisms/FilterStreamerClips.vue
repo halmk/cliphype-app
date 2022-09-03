@@ -42,10 +42,12 @@
     <div class="mt-4">
       <ClipPlaylist
         :clips="playlistClips"
+        @clickSort="sortPlaylistClipsByCreatedAt"
+        @clickPublish="publishPlaylist"
         @clickRemove="removeClip"
         @clickPrev="swapPrevClip"
         @clickNext="swapNextClip"
-        @clickSort="sortPlaylistClipsByCreatedAt"
+        @changeTitle="changeTitle"
       />
     </div>
   </div>
@@ -53,6 +55,7 @@
 
 <script>
 import moment from 'moment'
+import axios from 'axios'
 export default {
   name: 'FilterStreamerClips',
   props: {
@@ -63,6 +66,7 @@ export default {
     streamerId: '',
     clips: [],
     playlistClips: [],
+    playlistTitle: '',
     clipsAfter: '',
     videos: [],
     showDialog: false,
@@ -216,6 +220,30 @@ export default {
 
     sortPlaylistClipsByCreatedAt() {
       this.playlistClips.sort((a, b) => a.created_epoch - b.created_epoch)
+    },
+
+    async publishPlaylist() {
+      try {
+        const data = {}
+        data.streamer = this.streamer
+        data.creator = this.$store.state.user.name
+        data.title = this.playlistTitle
+        data.clips = []
+        this.playlistClips.forEach((clip) => {
+          data.clips.push(clip.id)
+        })
+        const response = await axios.post(
+          `${this.$config.apiURL}/api/playlists`,
+          data
+        )
+        console.log(response)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    changeTitle(title) {
+      this.playlistTitle = title
     },
   },
 }
