@@ -12,7 +12,7 @@ export const getters = {
     return !!state.id
   },
   isFollows(state) {
-    return !!state.follows
+    return state.follows.length !== 0
   },
 }
 
