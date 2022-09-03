@@ -12,13 +12,16 @@
       >
         {{ duration }}
       </span>
-      <v-overlay
-        absolute
-        :value="overlay"
-        opacity="0"
-        style="cursor: pointer"
-        @click="send"
-      >
+      <v-overlay absolute :value="overlay" opacity="0.5">
+        <div class="text-center">
+          <v-btn :href="url" outlined class="ml-auto text-caption">
+            visit this video
+            <v-icon right>mdi-open-in-new</v-icon>
+          </v-btn>
+          <v-btn outlined color="white" class="mt-1 text-caption" @click="send"
+            >select this video range</v-btn
+          >
+        </div>
       </v-overlay>
     </v-img>
     <div class="text-truncate text-subtitle-1 ml-1 font-weight-bold">
