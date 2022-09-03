@@ -2,26 +2,45 @@
   <div>
     <v-row class="mt-1">
       <v-col cols="12">
-        <div class="pb-3 grey darken-4">
-          <v-col
-            sm="6"
-            md="4"
-            lg="3"
-            class="px-1 mx-1 pt-3 rounded-lg elevation-1"
-          >
-            <PickDateRangeByCalendar @input="updateDateRange" />
-          </v-col>
-          <div class="px-2 pb-2 mt-5 rounded-lg elevation-1">
-            <PickDateRangeByVideo :videos="videos" @click="updateDateRange" />
-          </div>
-        </div>
+        <v-expansion-panels>
+          <v-expansion-panel>
+            <v-expansion-panel-header class="grey darken-3 font-weight-bold"
+              >Filter clips</v-expansion-panel-header
+            >
+            <v-expansion-panel-content>
+              <div class="pb-3 grey darken-4">
+                <v-col
+                  sm="6"
+                  md="4"
+                  lg="3"
+                  class="px-1 mx-1 pt-3 rounded-lg elevation-1"
+                >
+                  <PickDateRangeByCalendar @input="updateDateRange" />
+                </v-col>
+                <div class="px-2 pb-2 mt-5 rounded-lg elevation-1">
+                  <PickDateRangeByVideo
+                    :videos="videos"
+                    @click="updateDateRange"
+                  />
+                </div>
+              </div>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
         <div class="mt-4">
-          <span class="text-h6 font-weight-bold pa-2 rounded-lg elevation-1">
+          <span
+            class="grey darken-3 text-h6 font-weight-bolder pa-2 rounded-lg elevation-1"
+          >
             {{ dateRangeText }}
           </span>
         </div>
         <div class="mt-3">
-          <v-btn :loading="loadingGetClips" @click="getClips">Get Clips</v-btn>
+          <v-btn
+            :loading="loadingGetClips"
+            class="grey darken-3"
+            @click="getClips"
+            >Get Clips</v-btn
+          >
           <v-btn @click="getAfterClips">More</v-btn>
         </div>
         <div class="pt-1 pb-4 px-2 mt-5 rounded-lg elevation-1">
@@ -50,11 +69,17 @@
         @changeTitle="changeTitle"
       />
     </div>
-    <v-snackbar v-model="alert" top :timeout="alertTimeout" :color="alertColor">
+    <v-snackbar
+      v-model="alert"
+      bottom
+      right
+      :timeout="alertTimeout"
+      :color="alertColor"
+    >
       {{ alertMessage }}
       <template #action="{ attrs }">
         <v-btn color="white" text v-bind="attrs" @click="alert = false">
-          Close
+          <v-icon>mdi-close</v-icon>
         </v-btn>
       </template>
     </v-snackbar>
@@ -70,7 +95,10 @@ export default {
     streamer: { type: String, default: '' },
   },
   data: () => ({
-    dateRange: [moment().toISOString(), moment().toISOString()],
+    dateRange: [
+      moment().subtract(7, 'd').toISOString(),
+      moment().toISOString(),
+    ],
     streamerId: '',
     clips: [],
     playlistClips: [],
@@ -103,6 +131,11 @@ export default {
   methods: {
     updateDateRange(value) {
       this.dateRange = value
+      this.showAlert(
+        `Set new range: ${this.dateRangeText}`,
+        4000,
+        'blue darken-2'
+      )
     },
 
     async getStreamerId() {
@@ -135,6 +168,7 @@ export default {
         }
         this.clips = data
         this.clipsAfter = response.data.response.pagination.cursor
+        this.showAlert(`Get ${this.clips.length} clips`, 4000, 'green darken-1')
       } catch (error) {
         console.log(error)
       }
@@ -143,7 +177,7 @@ export default {
 
     async getAfterClips() {
       if (!this.clipsAfter) {
-        alert('No more clips!')
+        this.showAlert('No more clips', 4000, 'orange darken-4')
         return
       }
       try {
@@ -167,6 +201,7 @@ export default {
           this.clips.push(data[i])
         }
         this.clipsAfter = response.data.response.pagination.cursor
+        this.showAlert(`Get ${data.length} clips`, 4000, 'green darken-1')
       } catch (error) {
         console.log(error)
       }

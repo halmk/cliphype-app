@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>Select the range from calendar</h3>
+    <h3>Select the date range from calendar</h3>
     <v-menu
       ref="menu"
       v-model="menu"
@@ -42,7 +42,10 @@ export default {
   name: 'ClipDateRangePicker',
   props: {},
   data: () => ({
-    dateRange: [moment().format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')],
+    dateRange: [
+      moment().subtract(7, 'd').format('YYYY-MM-DD'),
+      moment().format('YYYY-MM-DD'),
+    ],
     menu: false,
   }),
   computed: {
