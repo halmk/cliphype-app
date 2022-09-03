@@ -50,6 +50,14 @@
         @changeTitle="changeTitle"
       />
     </div>
+    <v-snackbar v-model="alert" top :timeout="alertTimeout" :color="alertColor">
+      {{ alertMessage }}
+      <template #action="{ attrs }">
+        <v-btn color="white" text v-bind="attrs" @click="alert = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
@@ -72,6 +80,10 @@ export default {
     showDialog: false,
     embedClipURL: '',
     loadingGetClips: false,
+    alert: false,
+    alertMessage: '',
+    alertTimeout: 4000,
+    alertColor: 'orange darken-4',
   }),
   computed: {
     dateRangeText() {
@@ -214,8 +226,23 @@ export default {
     },
 
     addClipToPlaylist(id) {
-      const clip = this.clips.filter((value) => value.id === id)[0]
-      this.playlistClips.push(clip)
+      if (this.playlistClips.filter((clip) => clip.id === id).length === 0) {
+        const clip = this.clips.filter((value) => value.id === id)[0]
+        this.playlistClips.push(clip)
+      } else {
+        this.showAlert(
+          'this clip is already in the playlist',
+          4000,
+          'orange darken-4'
+        )
+      }
+    },
+
+    showAlert(message, timeout, color) {
+      this.alertMessage = message
+      this.alertTimeout = timeout
+      this.alertColor = color
+      this.alert = true
     },
 
     sortPlaylistClipsByCreatedAt() {
