@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mt-3 ml-4">
+    <div class="mt-3 mb-3 ml-4">
       Follow channels
       <v-icon
         v-if="!filterFavorite"
@@ -19,7 +19,7 @@
         mdi-star
       </v-icon>
     </div>
-    <v-virtual-scroll :items="filteredFollows" height="450" item-height="70">
+    <v-virtual-scroll :items="filteredFollows" height="450" item-height="60">
       <template #default="{ item }">
         <v-list-item :key="item.to_login" :to="item.to" router exact>
           <v-list-item-avatar>

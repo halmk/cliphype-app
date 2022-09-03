@@ -4,14 +4,25 @@
     <v-navigation-drawer v-model="drawer" right temporary fixed width="256">
       <v-list dense nav>
         <v-list-item>
-          <v-list-item-action>
-            <v-icon light> mdi-repeat </v-icon>
-          </v-list-item-action>
           <v-list-item-title>Playlist</v-list-item-title>
         </v-list-item>
       </v-list>
       <v-divider></v-divider>
-      <v-btn @click="clickSort">sort</v-btn>
+      <div class="mt-3 ml-3">
+        <v-btn @click="clickSort">sort</v-btn>
+        <v-btn :disabled="disabled" color="primary" @click="clickPublish"
+          >publish</v-btn
+        >
+      </div>
+      <div class="ma-3 mb-4">
+        <v-text-field
+          :value="title"
+          label="Title"
+          :rules="rules"
+          hide-details="auto"
+          @input="changeTitle"
+        ></v-text-field>
+      </div>
       <v-list>
         <transition-group name="swap-list" tag="p">
           <v-list-item
@@ -73,6 +84,11 @@ export default {
   data: () => ({
     index: 0,
     drawer: false,
+    title: '',
+    rules: [
+      (value) => !!value || 'Required.',
+      (value) => (value && value.length >= 3) || 'Min 3 characters',
+    ],
     overlay: false,
     embedClipURL: '',
     showDialog: false,
@@ -83,11 +99,22 @@ export default {
     autoplayTimer: -1,
     remainingTimeTillNextClip: -1,
   }),
-  computed: {},
+  computed: {
+    disabled() {
+      return this.clips.length <= 1 || this.title.length < 3
+    },
+  },
   mounted() {},
   methods: {
     clickSort() {
       this.$emit('clickSort')
+    },
+    clickPublish() {
+      this.$emit('clickPublish')
+    },
+    changeTitle(title) {
+      this.title = title
+      this.$emit('changeTitle', title)
     },
     playEmbedClip(index) {
       this.index = index

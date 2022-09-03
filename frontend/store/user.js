@@ -4,7 +4,7 @@ export const state = () => ({
   id: null,
   email: null,
   profileImage: null,
-  follows: null,
+  follows: [],
 })
 
 export const getters = {
@@ -12,7 +12,7 @@ export const getters = {
     return !!state.id
   },
   isFollows(state) {
-    return !!state.follows
+    return state.follows.length !== 0
   },
 }
 
@@ -23,7 +23,7 @@ export const mutations = {
     state.id = null
     state.email = null
     state.profileImage = null
-    state.follows = null
+    state.follows = []
   },
   setName(state, name) {
     state.name = name

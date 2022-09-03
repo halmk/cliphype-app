@@ -25,7 +25,7 @@
         </v-list-item>
       </v-list>
       <v-divider></v-divider>
-      <ListUserFollows />
+      <ListUserFollows v-show="isExistUser" />
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
@@ -50,6 +50,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'DefaultLayout',
   middleware: 'user',
@@ -80,6 +82,11 @@ export default {
       rightDrawer: false,
       title: 'ClipHype',
     }
+  },
+  computed: {
+    ...mapGetters({
+      isExistUser: 'user/isExistUser',
+    }),
   },
   mounted() {
     this.$twitch.apiURL = `${this.$config.apiURL}/api/twitch`
