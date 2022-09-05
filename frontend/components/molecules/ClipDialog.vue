@@ -13,7 +13,9 @@
       allowfullscreen
     >
     </iframe>
-    <slot></slot>
+    <div style="overflow-x: hidden">
+      <slot></slot>
+    </div>
   </v-dialog>
 </template>
 
