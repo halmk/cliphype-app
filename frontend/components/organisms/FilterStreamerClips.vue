@@ -44,7 +44,6 @@
           <v-btn @click="getAfterClips">More</v-btn>
         </div>
         <div class="pt-1 pb-4 px-2 mt-5 rounded-lg elevation-1">
-          <h1>Clips</h1>
           <ListClips
             :clips="clips"
             @click="openClipDialog"
@@ -70,18 +69,18 @@
       />
     </div>
     <v-snackbar
-      v-model="alert"
+      v-for="alert in alerts"
+      :key="alert.title"
+      v-model="alert.show"
+      content-class="text-center"
+      min-width="100px"
+      text
       bottom
-      right
-      :timeout="alertTimeout"
-      :color="alertColor"
+      :right="alert.right"
+      :timeout="alert.timeout"
+      :color="alert.color"
     >
-      {{ alertMessage }}
-      <template #action="{ attrs }">
-        <v-btn color="white" text v-bind="attrs" @click="alert = false">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
-      </template>
+      {{ alert.message }}
     </v-snackbar>
   </div>
 </template>
@@ -108,10 +107,32 @@ export default {
     showDialog: false,
     embedClipURL: '',
     loadingGetClips: false,
-    alert: false,
-    alertMessage: '',
-    alertTimeout: 4000,
-    alertColor: 'orange darken-4',
+    alerts: {
+      getClips: {
+        title: 'getClips',
+        show: false,
+        message: '',
+        timeout: 4000,
+        color: 'orange',
+        right: false,
+      },
+      updateDateRange: {
+        title: 'updateDateRange',
+        show: false,
+        message: '',
+        timeout: 4000,
+        color: 'orange',
+        right: true,
+      },
+      addClipToPlaylist: {
+        title: 'addClipToPlaylist',
+        show: false,
+        message: '',
+        timeout: 4000,
+        color: 'orange',
+        right: true,
+      },
+    },
   }),
   computed: {
     dateRangeText() {
@@ -132,10 +153,11 @@ export default {
     updateDateRange(value) {
       this.dateRange = value
       this.showAlert(
+        'updateDateRange',
         `Set new range: ${this.dateRangeText}`,
-        4000,
-        'blue darken-2'
+        'blue'
       )
+      this.getClips()
     },
 
     async getStreamerId() {
@@ -168,7 +190,7 @@ export default {
         }
         this.clips = data
         this.clipsAfter = response.data.response.pagination.cursor
-        this.showAlert(`Get ${this.clips.length} clips`, 4000, 'green darken-1')
+        this.showAlert('getClips', `Get ${this.clips.length} clips`, 'green')
       } catch (error) {
         console.log(error)
       }
@@ -177,7 +199,7 @@ export default {
 
     async getAfterClips() {
       if (!this.clipsAfter) {
-        this.showAlert('No more clips', 4000, 'orange darken-4')
+        this.showAlert('getClips', 'No more clips', 'orange')
         return
       }
       try {
@@ -201,7 +223,7 @@ export default {
           this.clips.push(data[i])
         }
         this.clipsAfter = response.data.response.pagination.cursor
-        this.showAlert(`Get ${data.length} clips`, 4000, 'green darken-1')
+        this.showAlert('getClips', `Get ${data.length} clips`, 'green')
       } catch (error) {
         console.log(error)
       }
@@ -266,18 +288,17 @@ export default {
         this.playlistClips.push(clip)
       } else {
         this.showAlert(
+          'addClipToPlaylist',
           'this clip is already in the playlist',
-          4000,
-          'orange darken-4'
+          'orange'
         )
       }
     },
 
-    showAlert(message, timeout, color) {
-      this.alertMessage = message
-      this.alertTimeout = timeout
-      this.alertColor = color
-      this.alert = true
+    showAlert(name, message, color) {
+      this.alerts[name].message = message
+      this.alerts[name].color = color
+      this.alerts[name].show = true
     },
 
     sortPlaylistClipsByCreatedAt() {
@@ -292,7 +313,17 @@ export default {
         data.title = this.playlistTitle
         data.clips = []
         this.playlistClips.forEach((clip) => {
-          data.clips.push(clip.id)
+          const publishClip = {
+            id: clip.id,
+            duration: clip.duration,
+            embed_url: clip.embed_url,
+            thumbnail_url: clip.thumbnail_url,
+            title: clip.title,
+            url: clip.url,
+            video_id: clip.video_id,
+            vod_offset: clip.vod_offset,
+          }
+          data.clips.push(publishClip)
         })
         const response = await axios.post(
           `${this.$config.apiURL}/api/playlists`,
