@@ -10,7 +10,11 @@
       <v-divider></v-divider>
       <div class="mt-3 ml-3">
         <v-btn @click="clickSort">sort</v-btn>
-        <v-btn :disabled="disabled" color="primary" @click="clickPublish"
+        <v-btn
+          :disabled="disabled"
+          :loading="loading"
+          color="primary"
+          @click="clickPublish"
           >publish</v-btn
         >
       </div>
@@ -80,6 +84,7 @@ export default {
   name: 'ClipPlaylist',
   props: {
     clips: Array,
+    loading: Boolean,
   },
   data: () => ({
     index: 0,
