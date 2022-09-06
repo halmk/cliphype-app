@@ -60,6 +60,7 @@
     <div class="mt-4">
       <ClipPlaylist
         :clips="playlistClips"
+        :loading="loadingPublish"
         @clickSort="sortPlaylistClipsByCreatedAt"
         @clickPublish="publishPlaylist"
         @clickRemove="removeClip"
@@ -107,6 +108,7 @@ export default {
     showDialog: false,
     embedClipURL: '',
     loadingGetClips: false,
+    loadingPublish: false,
     alerts: {
       getClips: {
         title: 'getClips',
@@ -124,8 +126,16 @@ export default {
         color: 'orange',
         right: true,
       },
-      addClipToPlaylist: {
-        title: 'addClipToPlaylist',
+      addcliptoplaylist: {
+        title: 'addcliptoplaylist',
+        show: false,
+        message: '',
+        timeout: 4000,
+        color: 'orange',
+        right: true,
+      },
+      publishPlaylist: {
+        title: 'publishPlaylist',
         show: false,
         message: '',
         timeout: 4000,
@@ -306,6 +316,7 @@ export default {
     },
 
     async publishPlaylist() {
+      this.loadingPublish = true
       try {
         const data = {}
         data.streamer = this.streamer
@@ -330,9 +341,20 @@ export default {
           data
         )
         console.log(response)
+        if (response.status === 200) {
+          this.$router.push(`/app/${this.streamer}/playlist`)
+        } else {
+          this.showAlert(
+            'publishPlaylist',
+            `Error: code ${response.status}`,
+            'red'
+          )
+        }
       } catch (error) {
         console.log(error)
+        this.showAlert('publishPlaylist', `Error`, 'red')
       }
+      this.loadingPublish = false
     },
 
     changeTitle(title) {
