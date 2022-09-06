@@ -46,7 +46,9 @@ export default {
   },
   mounted() {
     this.$twitch.apiURL = `${this.$config.apiURL}/api/twitch`
-    this.$router.push(`/app/${this.$route.params.streamer}/clip`)
+    if (this.$route.name === 'app-streamer') {
+      this.$router.push(`/app/${this.$route.params.streamer}/clip`)
+    }
   },
 }
 </script>
