@@ -21,7 +21,7 @@
     </div>
     <v-virtual-scroll :items="filteredFollows" height="450" item-height="60">
       <template #default="{ item }">
-        <v-list-item :key="item.to_login" :to="item.to" router exact>
+        <v-list-item :key="item.to_login" :to="item.to" router exact nuxt>
           <v-list-item-avatar>
             <v-img :src="item.icon"></v-img>
           </v-list-item-avatar>

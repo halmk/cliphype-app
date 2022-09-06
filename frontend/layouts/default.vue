@@ -15,6 +15,7 @@
           :to="item.to"
           router
           exact
+          nuxt
         >
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>

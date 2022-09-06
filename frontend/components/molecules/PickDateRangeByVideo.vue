@@ -91,7 +91,7 @@ export default {
       this.showCard = false
       setTimeout(() => {
         this.showCard = true
-      }, 1500)
+      }, 500)
     },
   },
 }
