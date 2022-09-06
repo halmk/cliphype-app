@@ -3,11 +3,11 @@
     <v-data-table
       :headers="headers"
       :items="playlists"
-      :items-per-page="5"
+      :items-per-page="itemsPerPage"
       :sort-by="'createdAt'"
-      :sort-desc="false"
+      :sort-desc="true"
     >
-      <template #[`item.thumbnail`]="{ item }">
+      <template #[`item.thumbnail`]="{ item, index }">
         <v-img
           :src="item.thumbnail"
           :aspect-ratio="16 / 9"
@@ -15,12 +15,12 @@
           width="140px"
           min-width="10px"
           class="ma-0 pa-0"
-          @mouseover="overlay = true"
-          @mouseleave="overlay = false"
+          @mouseover="$set(overlays, index, true)"
+          @mouseleave="$set(overlays, index, false)"
         >
           <v-overlay
             absolute
-            :value="overlay"
+            :value="overlays[index]"
             opacity="0.2"
             style="cursor: pointer"
             @click.stop="openDialog(item.id)"
@@ -56,15 +56,17 @@ export default {
       { text: 'Created at', value: 'createdAt' },
     ],
     playlists: [],
+    itemsPerPage: 10,
     loading: false,
     error: false,
-    overlay: false,
+    overlays: [],
     clips: [],
     showDialog: false,
   }),
   computed: {},
   mounted() {
     this.getPlaylists()
+    this.overlays = new Array(this.itemsPerPage).fill(false)
   },
   methods: {
     async getPlaylists() {
@@ -87,9 +89,11 @@ export default {
               'YYYY-MM-DD HH:mm:ss'
             ),
             thumbnail: response.data[i].clips[0].thumbnail_url,
-            totalDuration: response.data[i].clips.reduce(
-              (sum, clip) => sum + clip.duration,
-              0
+            totalDuration: parseInt(
+              response.data[i].clips.reduce(
+                (sum, clip) => sum + clip.duration,
+                0
+              )
             ),
             numClips: response.data[i].clips.length,
             views: response.data[i].playlist.viewCount,
