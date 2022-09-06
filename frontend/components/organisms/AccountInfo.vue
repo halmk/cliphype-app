@@ -16,7 +16,9 @@
     </v-row>
     <v-row>
       <v-col>
-        <v-btn color="orange lighten-2" to="/account/logout"> Logout </v-btn>
+        <v-btn color="orange lighten-2" to="/account/logout" nuxt>
+          Logout
+        </v-btn>
         <v-btn
           color="purple lighten-3"
           href="https://www.twitch.tv/settings/connections"

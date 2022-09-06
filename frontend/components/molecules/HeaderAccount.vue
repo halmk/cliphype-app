@@ -1,12 +1,12 @@
 <template>
   <div>
     <span v-if="isLogined">
-      <v-btn color="blue-grey" class="white--text" to="/account">
+      <v-btn color="blue-grey" class="white--text" to="/account" nuxt>
         <v-icon> mdi-account </v-icon>
       </v-btn>
     </span>
     <span v-else>
-      <v-btn color="blue-grey" class="white--text" to="/account/login">
+      <v-btn color="blue-grey" class="white--text" to="/account/login" nuxt>
         <v-icon :left="showText"> mdi-login </v-icon>
         <span v-show="showText"> Login </span>
       </v-btn>
