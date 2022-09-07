@@ -49,7 +49,7 @@ export default {
   }),
   computed: {
     length() {
-      return parseInt(this.clips.length / this.size)
+      return parseInt(this.clips.length / this.size) + 1
     },
     size() {
       return (12 / this.bkPoint.flex) * this.bkPoint.rows
