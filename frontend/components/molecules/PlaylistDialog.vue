@@ -2,7 +2,7 @@
   <div>
     <ClipDialog
       class=""
-      :embed-clip-u-r-l="embedClipURL"
+      :embed-clip-u-r-l="formattedEmbedURL"
       :show-dialog="show"
       @close="clickClose"
     >
@@ -97,7 +97,18 @@ export default {
     autoplayTimer: -1,
     remainingTimeTillNextClip: -1,
   }),
-  computed: {},
+  computed: {
+    formattedEmbedURL() {
+      let formatted = this.embedClipURL
+      if (!formatted.includes('autoplay')) {
+        formatted += '&autoplay=true'
+      }
+      if (!formatted.includes('parent')) {
+        formatted += `&parent=${this.$config.domain}`
+      }
+      return formatted
+    },
+  },
   watch: {
     show(newShow, oldShow) {
       if (newShow && !oldShow) {
