@@ -30,6 +30,7 @@ export default {
       tabs: [
         { id: 1, name: 'Clip', route: `/app/${params.streamer}/clip` },
         { id: 2, name: 'Playlist', route: `/app/${params.streamer}/playlist` },
+        { id: 3, name: 'Chat', route: `/app/${params.streamer}/chat` },
       ],
     }
   },
