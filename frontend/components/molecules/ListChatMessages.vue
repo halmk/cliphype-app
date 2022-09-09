@@ -31,13 +31,24 @@ export default {
     messages: [],
   }),
   computed: {},
-  async mounted() {
-    await this.getChatbot()
-    const opts = this.$chatbot.getOpts()
-    this.$chatbot.newClient(opts)
-    this.$chatbot.onEvent('message', this.onMessageHandler)
-    this.$chatbot.onEvent('connected', this.onConnectedHandler)
-    this.$chatbot.connect()
+  mounted() {
+    try {
+      this.$chatbot.initOpts('', '', this.streamer)
+      const opts = this.$chatbot.getAnonymousOpts()
+      this.$chatbot.newClient(opts)
+      this.$chatbot.onEvent('message', this.onMessageHandler)
+      this.$chatbot.onEvent('connected', this.onConnectedHandler)
+      this.$chatbot.connect()
+    } catch (error) {
+      this.messages.push({
+        message: 'Failed to connect to the chat',
+        displayName: '[BOT]',
+        color: '#F44336',
+      })
+    }
+  },
+  destroyed() {
+    this.$chatbot.disconnect()
   },
   methods: {
     async getChatbot() {
@@ -71,6 +82,11 @@ export default {
 
     // Called every time the bot connects to Twitch chat
     onConnectedHandler(addr, port) {
+      this.messages.push({
+        message: 'Connected to the chat',
+        displayName: '[BOT]',
+        color: '#E0E0E0',
+      })
       console.log(`* Connected to ${addr}:${port}`)
     },
 
