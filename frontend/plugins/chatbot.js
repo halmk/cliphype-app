@@ -18,6 +18,12 @@ const ChatBot = {
     }
   },
 
+  getAnonymousOpts() {
+    return {
+      channels: [ChatBot.channel],
+    }
+  },
+
   getMessages() {
     return ChatBot.messages
   },
@@ -43,6 +49,12 @@ const ChatBot = {
   connect() {
     // Connect to Twitch:
     ChatBot.client.connect()
+  },
+
+  disconnect() {
+    // Disconnect from Twitch:
+    ChatBot.client.disconnect()
+    console.log('* Disconnected from IRC')
   },
 }
 
