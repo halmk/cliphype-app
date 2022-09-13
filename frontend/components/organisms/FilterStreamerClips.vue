@@ -71,7 +71,7 @@
     </div>
     <v-snackbar
       v-for="alert in alerts"
-      :key="alert.title"
+      :key="alert.id"
       v-model="alert.show"
       content-class="text-center"
       min-width="100px"
@@ -111,7 +111,7 @@ export default {
     loadingPublish: false,
     alerts: {
       getClips: {
-        title: 'getClips',
+        id: 1,
         show: false,
         message: '',
         timeout: 4000,
@@ -119,15 +119,15 @@ export default {
         right: false,
       },
       updateDateRange: {
-        title: 'updateDateRange',
+        id: 2,
         show: false,
         message: '',
         timeout: 4000,
         color: 'orange',
         right: true,
       },
-      addcliptoplaylist: {
-        title: 'addcliptoplaylist',
+      addClipToPlaylist: {
+        id: 3,
         show: false,
         message: '',
         timeout: 4000,
@@ -135,7 +135,7 @@ export default {
         right: true,
       },
       publishPlaylist: {
-        title: 'publishPlaylist',
+        id: 4,
         show: false,
         message: '',
         timeout: 4000,

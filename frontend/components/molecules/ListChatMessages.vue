@@ -12,6 +12,7 @@
             <v-list-item-title>
               <span :style="{ color: item.color }">{{ item.displayName }}</span>
               <span>: {{ item.message }}</span>
+              <span> ({{ item.hype }})</span>
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -24,6 +25,7 @@
 import axios from 'axios'
 
 export default {
+  name: 'ListChatMessages',
   props: {
     streamer: String,
   },
@@ -62,6 +64,28 @@ export default {
         console.log(error)
       }
     },
+    async getHypes(message) {
+      try {
+        const params = { sentence: message }
+        const response = await axios.get(`${this.$config.apiURL}/api/hypes`, {
+          params,
+        })
+        return response
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async setHypes(index, message) {
+      const response = await this.getHypes(message)
+      const hypes = response.data.hypes
+      const maxHype = hypes.reduce((hype, obj) => {
+        return Math.max(hype, obj.value)
+      }, 0.1)
+      console.log(maxHype)
+      message = this.messages[index]
+      message.hype = maxHype.toFixed(2)
+      this.$set(this.messages, index, message)
+    },
     // Called every time a message comes in
     onMessageHandler(target, context, msg, self) {
       if (self) {
@@ -72,11 +96,13 @@ export default {
       const message = msg.trim()
       const displayName = context['display-name']
       const color = context.color
+      const index = this.messages.length
       this.messages.push({
         message,
         displayName,
         color,
       })
+      this.setHypes(index, message)
       this.scrollDown()
     },
 

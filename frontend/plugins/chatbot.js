@@ -56,6 +56,10 @@ const ChatBot = {
     ChatBot.client.disconnect()
     console.log('* Disconnected from IRC')
   },
+
+  readyState() {
+    return ChatBot.client.readyState()
+  },
 }
 
 export default ({ app }, inject) => {
