@@ -1,5 +1,5 @@
 <template>
-  <ListChatMessages :streamer="streamer" />
+  <ChatWithHypes :streamer="streamer" />
 </template>
 
 <script>
