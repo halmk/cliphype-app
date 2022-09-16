@@ -1,8 +1,13 @@
+import axios from 'axios'
+
 export const state = () => ({
   name: null,
   displayName: null,
   id: null,
+  token: null,
   email: null,
+  isStaff: null,
+  isSuperuser: null,
   profileImage: null,
   follows: [],
 })
@@ -21,7 +26,11 @@ export const mutations = {
     state.name = null
     state.displayName = null
     state.id = null
+    state.token = null
     state.email = null
+    state.lastLogin = null
+    state.isStaff = null
+    state.isSuperuser = null
     state.profileImage = null
     state.follows = []
   },
@@ -34,8 +43,20 @@ export const mutations = {
   setID(state, id) {
     state.id = id
   },
+  setToken(state, token) {
+    state.token = token
+  },
   setEmail(state, email) {
     state.email = email
+  },
+  setLastLogin(state, lastLogin) {
+    state.lastLogin = lastLogin
+  },
+  setIsStaff(state, isStaff) {
+    state.isStaff = isStaff
+  },
+  setIsSuperuser(state, isSuperuser) {
+    state.isSuperuser = isSuperuser
   },
   setProfileImage(state, profileImage) {
     state.profileImage = profileImage
@@ -49,7 +70,22 @@ export const mutations = {
 }
 
 export const actions = {
-  async getUser({ commit }) {
+  async getUser({ state, commit }) {
+    try {
+      const response = await axios.get(`${this.$config.apiURL}/api/user`, {
+        headers: {
+          Authorization: `Bearer ${state.token}`,
+        },
+      })
+      const data = response.data
+      commit('setLastLogin', data.lastLogin)
+      commit('setIsStaff', data.isStaff)
+      commit('setIsSuperuser', data.isSuperuser)
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  async getTwitchUser({ commit }) {
     this.$twitch.apiURL = `${this.$config.apiURL}/api/twitch`
     this.$twitch.user.token = this.$cookies.get('jwt')
     try {
