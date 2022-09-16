@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row>
+    <v-row class="flex">
       <v-col cols="12" lg="6">
         <div class="ma-1 elevation-5">
           <ListChatMessages :messages="messages" />
@@ -8,6 +8,21 @@
       </v-col>
       <v-col cols="12" lg="6">
         <h2 class="pl-1">Hype Chart</h2>
+        <v-tooltip bottom>
+          <template #activator="{ on, attrs }">
+            <div v-bind="attrs" style="width: min-content" v-on="on">
+              <v-switch
+                v-model="enableAutoClip"
+                class="pl-1"
+                style="width: 200px"
+                :disabled="disableAutoClipSwitch"
+                dense
+                label="Turn on AutoClip"
+              ></v-switch>
+            </div>
+          </template>
+          <span>Only specific users are allowed: streamer, staff</span>
+        </v-tooltip>
         <line-chart
           class="mb-2 elevation-5"
           :chart-options="chartOptions"
@@ -28,6 +43,7 @@ export default {
     streamer: String,
   },
   data: () => ({
+    streamerID: '',
     messages: [],
     chartOptions: {
       responsive: true,
@@ -62,8 +78,8 @@ export default {
           label: 'outlier',
           data: [],
           fill: false,
-          pointBorderWidth: 0,
-          pointRadius: 0,
+          pointBorderWidth: [],
+          pointRadius: [],
           borderDash: [5, 5],
           borderColor: 'rgb(175, 102, 102)',
           tension: 0.1,
@@ -72,8 +88,8 @@ export default {
           label: 'outlier (weak)',
           data: [],
           fill: false,
-          pointBorderWidth: 0,
-          pointRadius: 0,
+          pointBorderWidth: [],
+          pointRadius: [],
           borderDash: [5, 5],
           borderColor: 'rgb(102, 175, 102)',
           tension: 0.1,
@@ -84,10 +100,24 @@ export default {
     recentHypesInterval: 10 * 1000,
     totalHypes: [],
     totalHypesInterval: 60 * 60 * 1000,
+    enableAutoClip: false,
+    lastCreateClipTime: 0,
+    autoClipCoolTime: 30 * 1000,
+    autoClipDelay: 15 * 1000,
   }),
-  computed: {},
-  mounted() {
+  computed: {
+    disableAutoClipSwitch() {
+      return (
+        this.streamer === this.$store.state.user.name ||
+        this.$store.state.user.isStaff
+      )
+    },
+  },
+  async mounted() {
+    this.$twitch.apiURL = `${this.$config.apiURL}/api/twitch`
+    this.$twitch.user.token = this.$cookies.get('jwt')
     try {
+      await this.getStreamerId()
       this.$chatbot.initOpts('', '', this.streamer)
       const opts = this.$chatbot.getAnonymousOpts()
       this.$chatbot.newClient(opts)
@@ -106,6 +136,15 @@ export default {
     this.$chatbot.disconnect()
   },
   methods: {
+    async getStreamerId() {
+      try {
+        const response = await this.$twitch.app.getUserId(this.streamer)
+        const data = response.data.response.data
+        this.streamerID = data[0].id
+      } catch (error) {
+        console.log(error)
+      }
+    },
     async getChatbot() {
       try {
         const response = await axios.get(`${this.$config.apiURL}/api/chatbot`)
@@ -138,11 +177,39 @@ export default {
       message.hype = maxHype.toFixed(2)
       this.$set(this.messages, index, message)
 
-      const hypeStats = this.calcHypeStats(current, maxHype)
+      // calculate hype stats
+      const { totalHype, outlier, outlierWeak } = this.calcHypeStats(
+        current,
+        maxHype
+      )
       this.chartData.labels.push(current)
-      this.chartData.datasets[0].data.push(hypeStats[0])
-      this.chartData.datasets[1].data.push(hypeStats[1])
-      this.chartData.datasets[2].data.push(hypeStats[2])
+      this.chartData.datasets[0].data.push(totalHype)
+      this.chartData.datasets[1].data.push(outlier)
+      this.chartData.datasets[1].pointBorderWidth.push(0)
+      this.chartData.datasets[1].pointRadius.push(0)
+      this.chartData.datasets[2].data.push(outlierWeak)
+
+      // determine if the create clip condition is satisfied
+      if (this.canCreateClip() && totalHype >= outlierWeak) {
+        this.chartData.datasets[2].pointBorderWidth.push(8)
+        this.chartData.datasets[2].pointRadius.push(3)
+        const exceededAt = Date.now()
+        this.lastCreateClipTime = exceededAt
+        // send create clip request after the specified delay
+        await new Promise((resolve) =>
+          setTimeout(async () => {
+            try {
+              await this.$twitch.user.createClip(this.streamerID)
+            } catch (error) {
+              console.log(error)
+            }
+            resolve()
+          }, this.autoClipDelay)
+        )
+      } else {
+        this.chartData.datasets[2].pointBorderWidth.push(0)
+        this.chartData.datasets[2].pointRadius.push(0)
+      }
     },
     calcHypeStats(current, hype) {
       this.recentHypes.push({ value: hype, unixTime: current })
@@ -164,7 +231,7 @@ export default {
       })
       const outlier = quartile[2] + 1.5 * (quartile[2] - quartile[0])
       const outlierWeak = quartile[2] + 0.5 * (quartile[2] - quartile[0])
-      return [totalHype, outlier, outlierWeak]
+      return { totalHype, outlier, outlierWeak }
     },
     calcQuartile(array) {
       array.sort((a, b) => a - b)
@@ -193,6 +260,12 @@ export default {
         res = array[m]
       }
       return res
+    },
+    canCreateClip() {
+      const diff = Date.now() - this.lastCreateClipTime
+      if (!this.enableAutoClip) return false
+      if (diff < this.autoClipCoolTime) return false
+      return true
     },
     // Called every time a message comes in
     onMessageHandler(target, context, msg, self) {
