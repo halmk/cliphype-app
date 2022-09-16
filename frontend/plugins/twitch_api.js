@@ -189,12 +189,29 @@ const TwitchAPI = {
       })
     },
 
+    postRequest: async (url, data) => {
+      data.url = url
+      console.log(data, TwitchAPI.user.apiURL())
+      return await axios.post(TwitchAPI.user.apiURL(), data, {
+        headers: {
+          Authorization: `Bearer ${TwitchAPI.user.token}`,
+        },
+      })
+    },
+
     /* 名前からIDを取得する */
     getUser: async () => {
       const url = 'https://api.twitch.tv/helix/users'
       const params = {}
 
       return await TwitchAPI.user.getRequest(url, params)
+    },
+
+    createClip: async (broadcasterID) => {
+      const url = `https://api.twitch.tv/helix/clips?broadcaster_id=${broadcasterID}`
+      const data = {}
+
+      return await TwitchAPI.user.postRequest(url, data)
     },
   },
 }
