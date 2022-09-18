@@ -37,6 +37,8 @@
 <script>
 import axios from 'axios'
 import 'chartjs-adapter-moment'
+import 'chartjs-plugin-streaming'
+
 export default {
   name: 'ChatWithHypes',
   props: {
@@ -51,13 +53,10 @@ export default {
       animation: false,
       scales: {
         x: {
-          type: 'time',
-          time: {
-            unit: 'second',
-            displayFormats: {
-              second: 'HH:mm:ss',
-            },
-            stepSize: 10,
+          type: 'realtime',
+          realtime: {
+            duration: 3 * 60 * 1000,
+            delay: 0,
           },
         },
       },
