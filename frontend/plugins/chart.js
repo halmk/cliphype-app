@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import { Line } from 'vue-chartjs'
+import ChartStreaming from 'chartjs-plugin-streaming'
 import {
   Chart as ChartJS,
   Title,
@@ -22,7 +23,8 @@ ChartJS.register(
   CategoryScale,
   LinearScale,
   LineElement,
-  TimeScale
+  TimeScale,
+  ChartStreaming
 )
 
 Vue.component('LineChart', {
