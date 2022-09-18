@@ -59,6 +59,7 @@ export default {
           realtime: {
             duration: 3 * 60 * 1000,
             delay: 0,
+            frameRate: 5,
           },
         },
       },
@@ -100,7 +101,7 @@ export default {
     recentHypes: [],
     recentHypesInterval: 10 * 1000,
     totalHypes: [],
-    totalHypesInterval: 60 * 60 * 1000,
+    totalHypesInterval: 30 * 60 * 1000,
     enableAutoClip: false,
     lastCreateClipTime: 0,
     autoClipCoolTime: 30 * 1000,
@@ -252,7 +253,6 @@ export default {
       return q
     },
     calcMid(array) {
-      array.sort((a, b) => a - b)
       const n = array.length
       const m = parseInt(n / 2)
       let res
