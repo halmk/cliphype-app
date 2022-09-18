@@ -46,7 +46,9 @@ export default {
   },
   data: () => ({
     streamerID: '',
+    serialID: 0,
     messages: [],
+    messagesInterval: 3 * 60 * 1000,
     chartOptions: {
       responsive: true,
       maintainAspectRatio: true,
@@ -165,13 +167,14 @@ export default {
         console.log(error)
       }
     },
-    async setHypes(index, message) {
+    async setHypes(id, message) {
       const current = Date.now()
       const response = await this.getHypes(message)
       const hypes = response.data.hypes
       const maxHype = hypes.reduce((hype, obj) => {
         return Math.max(hype, obj.value)
       }, 0.1)
+      const index = this.messages.findIndex((obj) => obj.id === id)
       message = this.messages[index]
       message.hype = maxHype.toFixed(2)
       this.$set(this.messages, index, message)
@@ -277,13 +280,21 @@ export default {
       const message = msg.trim()
       const displayName = context['display-name']
       const color = context.color
-      const index = this.messages.length
+      const current = Date.now()
+      const id = ++this.serialID
       this.messages.push({
+        id,
         message,
         displayName,
         color,
+        unixTime: current,
+        hype: 0.0,
       })
-      this.setHypes(index, message)
+      this.setHypes(id, message)
+      this.messages = this.messages.filter((obj) => {
+        const diff = current - obj.unixTime
+        return diff <= this.messagesInterval
+      })
     },
 
     // Called every time the bot connects to Twitch chat
