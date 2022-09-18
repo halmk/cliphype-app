@@ -108,8 +108,8 @@ export default {
   computed: {
     disableAutoClipSwitch() {
       return (
-        this.streamer === this.$store.state.user.name ||
-        this.$store.state.user.isStaff
+        this.streamer !== this.$store.state.user.name &&
+        !this.$store.state.user.isStaff
       )
     },
   },
@@ -267,6 +267,7 @@ export default {
       if (diff < this.autoClipCoolTime) return false
       return true
     },
+
     // Called every time a message comes in
     onMessageHandler(target, context, msg, self) {
       if (self) {
