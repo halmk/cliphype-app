@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+      - "5000:5000"
+    working_dir: "/cliplist-ttv"
+    volumes:
+      - "./:/cliplist-ttv"
+      - node_modules_volume:/cliplist-ttv/frontend/node_modules
+    tty: true
+    environment:
+      - HOST=0.0.0.0
+      - CHOKIDAR_USEPOLLING=true
+    links:
+      - db
+  db:
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: cliphype
+      POSTGRES_PASSWORD: cliphype
+      POSTGRES_DB: cliphype
+    ports:
+      - 5432:5432
+volumes:
+  node_modules_volume:
