@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Vue from 'vue'
 
 export const state = () => ({
   name: null,
@@ -65,7 +66,9 @@ export const mutations = {
     state.follows = follows
   },
   alterFavorite(state, index) {
-    state.follows[index].isFavorite = !state.follows[index].isFavorite
+    const follow = state.follows[index]
+    follow.isFavorite = !follow.isFavorite
+    Vue.set(state.follows, index, follow)
   },
 }
 
