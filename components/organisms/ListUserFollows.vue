@@ -66,10 +66,7 @@ export default {
     filteredFollows() {
       if (this.filterFavorite) {
         return this.follows.filter((follow) => {
-          const fav = this.favFollowsNames.filter(
-            (fav) => fav === follow.to_login
-          )
-          return fav.length === 1
+          return follow.isFavorite
         })
       } else {
         return this.follows
@@ -105,8 +102,9 @@ export default {
     setFavFollows() {
       this.favFollowsNames.forEach((followName) => {
         this.follows.forEach((follow, index) => {
-          if (follow.to_login === followName)
+          if (follow.to_login === followName && !follow.isFavorite) {
             this.$store.commit('user/alterFavorite', index)
+          }
         })
       })
     },
