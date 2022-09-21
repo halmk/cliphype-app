@@ -55,12 +55,20 @@
     <ClipDialog
       :show-dialog="showDialog"
       :embed-clip-u-r-l="embedClipURL"
-      @close="showDialog = !showDialog"
+      @close="closeClipDialog"
     />
     <div class="mt-4">
-      <ClipPlaylist
+      <v-btn
+        :disabled="playlistClips.length === 0"
+        @click="showPlaylistEditor = true"
+      >
+        Open Playlist
+      </v-btn>
+      <PlaylistEditor
         :clips="playlistClips"
         :loading="loadingPublish"
+        :show="showPlaylistEditor"
+        @clickClose="showPlaylistEditor = false"
         @clickSort="sortPlaylistClipsByCreatedAt"
         @clickPublish="publishPlaylist"
         @clickRemove="removeClip"
@@ -106,6 +114,7 @@ export default {
     clipsAfter: '',
     videos: [],
     showDialog: false,
+    showPlaylistEditor: false,
     embedClipURL: '',
     loadingGetClips: false,
     loadingPublish: false,
@@ -266,6 +275,11 @@ export default {
       this.showDialog = true
     },
 
+    closeClipDialog() {
+      this.embedClipURL = null
+      this.showDialog = false
+    },
+
     removeClip(index) {
       this.playlistClips.splice(index, 1)
     },
@@ -282,7 +296,7 @@ export default {
     },
 
     swapNextClip(index) {
-      if (index + 1 < this.clips.length) {
+      if (index + 1 < this.playlistClips.length) {
         this.playlistClips.splice(
           index,
           2,

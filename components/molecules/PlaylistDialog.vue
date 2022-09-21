@@ -26,10 +26,31 @@
           <v-icon small>mdi-plus</v-icon>
         </v-btn>
       </div>
+      <div v-show="editable" class="mt-3">
+        <div class="mt-3 ml-3">
+          <v-btn @click="clickSort">sort</v-btn>
+          <v-btn
+            :disabled="disabled"
+            :loading="loading"
+            color="primary"
+            @click="clickPublish"
+            >publish</v-btn
+          >
+        </div>
+        <div class="ma-3 mb-4">
+          <v-text-field
+            :value="title"
+            label="Title"
+            :rules="rules"
+            hide-details="auto"
+            @input="changeTitle"
+          ></v-text-field>
+        </div>
+      </div>
       <div>
         <v-data-table
           v-model="playings"
-          :headers="headers"
+          :headers="showHeaders"
           :items="clips"
           :mobile-breakpoint="300"
           disable-sort
@@ -66,6 +87,19 @@
               </v-overlay>
             </v-img>
           </template>
+          <template #[`item.actions`]="{ index }">
+            <div v-show="editable">
+              <v-icon small class="" @click="swapPrevClip(index)">
+                mdi-chevron-up
+              </v-icon>
+              <v-icon small class="" @click="swapNextClip(index)">
+                mdi-chevron-down
+              </v-icon>
+              <v-icon small class="ml-2" @click="removeClip(index)">
+                mdi-delete
+              </v-icon>
+            </div>
+          </template>
         </v-data-table>
       </div>
     </ClipDialog>
@@ -79,12 +113,20 @@ export default {
   props: {
     clips: Array,
     show: Boolean,
+    loading: Boolean,
+    editable: { type: Boolean, default: false },
   },
   data: () => ({
+    title: '',
     headers: [
       { text: '', value: 'index', width: '20px' },
       { text: '', value: 'thumbnail_url', width: '120px' },
       { text: 'Title', value: 'title' },
+      { text: 'Actions', value: 'actions', sortable: false, width: '120px' },
+    ],
+    rules: [
+      (value) => !!value || 'Required.',
+      (value) => (value && value.length >= 3) || 'Min 3 characters',
     ],
     overlays: [],
     playings: [],
@@ -98,7 +140,11 @@ export default {
     remainingTimeTillNextClip: -1,
   }),
   computed: {
+    disabled() {
+      return this.clips.length <= 1 || this.title.length < 3
+    },
     formattedEmbedURL() {
+      if (!this.embedClipURL) return null
       let formatted = this.embedClipURL
       if (!formatted.includes('autoplay')) {
         formatted += '&autoplay=true'
@@ -107,6 +153,18 @@ export default {
         formatted += `&parent=${this.$config.domain}`
       }
       return formatted
+    },
+    selectedHeaders() {
+      const selectedHeaders = ['index', 'thumbnail_url', 'title']
+      if (this.editable) {
+        selectedHeaders.push('actions')
+      }
+      return selectedHeaders
+    },
+    showHeaders() {
+      return this.headers.filter((header) =>
+        this.selectedHeaders.includes(header.value)
+      )
     },
   },
   watch: {
@@ -120,7 +178,7 @@ export default {
       }
       if (!newShow && oldShow) {
         this.index = 0
-        this.embedClipURL = ''
+        this.embedClipURL = null
         this.overlays = new Array(this.clips.length).fill(false)
         this.playings = new Array(this.clips.length).fill(false)
       }
@@ -130,8 +188,17 @@ export default {
       this.$set(this.playings, oldIndex, false)
     },
   },
-  mounted() {},
   methods: {
+    clickSort() {
+      this.$emit('clickSort')
+    },
+    clickPublish() {
+      this.$emit('clickPublish')
+    },
+    changeTitle(title) {
+      this.title = title
+      this.$emit('changeTitle', title)
+    },
     clickClose() {
       this.$emit('clickClose')
     },
@@ -191,23 +258,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.swap-list-move {
-  transition: transform 0.8s ease;
-}
-
-.swap-list-enter-from,
-.swap-list-leave-to {
-  opacity: 0;
-  transform: translateX(30px);
-}
-
-.swap-list-leave-active {
-  position: absolute;
-}
-
-.move-button {
-  text-align: center;
-}
-</style>
