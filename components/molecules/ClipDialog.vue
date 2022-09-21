@@ -2,20 +2,30 @@
   <v-dialog
     :value="showDialog"
     :width="bkPoint.dialogWidth"
-    @click:outside="close"
-    @keydown="close"
+    :fullscreen="bkPoint.fullscreen"
+    transition="dialog-bottom-transition"
+    @click:outside.stop="close"
   >
-    <iframe
-      :src="embedClipURL"
-      :height="bkPoint.dialogHeight"
-      :width="bkPoint.dialogWidth"
-      frameborder="0"
-      allowfullscreen
-    >
-    </iframe>
-    <div style="overflow-x: hidden">
-      <slot></slot>
-    </div>
+    <v-card>
+      <v-toolbar dark dense color="grey darken-4">
+        <v-btn icon dark @click.stop="close">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </v-toolbar>
+      <v-sheet :height="bkPoint.dialogHeight" width="100%">
+        <iframe
+          :src="embedClipURL"
+          height="100%"
+          width="100%"
+          frameborder="0"
+          allowfullscreen
+        >
+        </iframe>
+      </v-sheet>
+      <div style="overflow-x: hidden">
+        <slot></slot>
+      </div>
+    </v-card>
   </v-dialog>
 </template>
 
@@ -33,19 +43,21 @@ export default {
       const point = {
         dialogHeight: 9 * 60,
         dialogWidth: 16 * 60,
+        fullscreen: false,
       }
       switch (bkPt.name) {
         case 'md':
-          point.dialogHeight = 9 * 50
           point.dialogWidth = 16 * 50
+          point.dialogHeight = 9 * 50
           break
         case 'sm':
-          point.dialogHeight = 9 * 40
           point.dialogWidth = 16 * 40
+          point.dialogHeight = 9 * 40
           break
         case 'xs':
-          point.dialogHeight = 9 * 20
-          point.dialogWidth = 16 * 20
+          point.dialogWidth = bkPt.width
+          point.dialogHeight = (bkPt.width * 9) / 16
+          point.fullscreen = true
           break
         default:
           break
