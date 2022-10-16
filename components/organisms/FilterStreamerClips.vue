@@ -165,8 +165,8 @@ export default {
   async mounted() {
     this.$twitch.apiURL = `${this.$config.apiURL}/api/twitch`
     await this.getStreamerId()
-    await this.getVideos()
     await this.getClips()
+    await this.getVideos()
   },
   methods: {
     updateDateRange(value) {
