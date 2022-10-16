@@ -72,7 +72,7 @@ const TwitchAPI = {
     },
 
     /* クリップのIDを指定してクリップを取得する */
-    getClipById: async (clipId) => {
+    getClipsById: async (clipId) => {
       const url = 'https://api.twitch.tv/helix/clips'
       const params = {
         id: clipId,
@@ -207,9 +207,15 @@ const TwitchAPI = {
       return await TwitchAPI.user.getRequest(url, params)
     },
 
-    createClip: async (broadcasterID) => {
+    createClip: async (broadcasterID, streamer, hype) => {
       const url = `https://api.twitch.tv/helix/clips?broadcaster_id=${broadcasterID}`
-      const data = {}
+      const data = {
+        twitch: {},
+        cliphype: {
+          streamer,
+          hype,
+        },
+      }
 
       return await TwitchAPI.user.postRequest(url, data)
     },
