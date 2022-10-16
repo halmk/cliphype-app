@@ -202,7 +202,19 @@ export default {
         await new Promise((resolve) =>
           setTimeout(async () => {
             try {
-              await this.$twitch.user.createClip(this.streamerID)
+              const maxHype = this.totalHypes.reduce((prev, obj) => {
+                let res = prev
+                if (obj.unixTime >= exceededAt) {
+                  res = Math.max(res, obj.value)
+                }
+                return res
+              }, 0.0)
+              console.log(this.streamer, maxHype)
+              await this.$twitch.user.createClip(
+                this.streamerID,
+                this.streamer,
+                maxHype
+              )
             } catch (error) {
               console.log(error)
             }
