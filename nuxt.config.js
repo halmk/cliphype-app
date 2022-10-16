@@ -25,6 +25,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '~/plugins/twitch_api.js',
+    '~/plugins/cliphype_api.js',
     '~/plugins/chatbot.js',
     { src: '~/plugins/chart.js', mode: 'client' },
   ],
