@@ -55,7 +55,6 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'DefaultLayout',
-  middleware: 'user',
   data() {
     return {
       clipped: true,
