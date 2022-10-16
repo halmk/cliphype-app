@@ -32,8 +32,9 @@ export default {
       activeTab: '',
       tabs: [
         { id: 1, name: 'Clip', route: `/app/${params.streamer}/clip` },
-        { id: 2, name: 'Playlist', route: `/app/${params.streamer}/playlist` },
-        { id: 3, name: 'Chat', route: `/app/${params.streamer}/chat` },
+        { id: 2, name: 'AutoClip', route: `/app/${params.streamer}/autoclip` },
+        { id: 3, name: 'Playlist', route: `/app/${params.streamer}/playlist` },
+        { id: 4, name: 'Chat', route: `/app/${params.streamer}/chat` },
       ],
     }
   },
