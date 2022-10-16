@@ -73,7 +73,21 @@ export default {
       }
     },
   },
-  mounted() {
+  async mounted() {
+    this.$store.commit('auth/setSession', this.$cookies.get('jwt'))
+    this.$store.commit('user/setToken', this.$cookies.get('jwt'))
+    const isLogined = this.$store.getters['auth/isLogined']
+    const isExistUser = this.$store.getters['user/isExistUser']
+    if (isLogined) {
+      if (!isExistUser) {
+        await this.$store.dispatch('user/getUser')
+        await this.$store.dispatch('user/getTwitchUser')
+      }
+      const isFollows = this.$store.getters['user/isFollows']
+      if (!isFollows) {
+        await this.$store.dispatch('user/getFollows')
+      }
+    }
     this.fetchFavFollows()
     this.setFavFollows()
   },
