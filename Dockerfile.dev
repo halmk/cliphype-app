@@ -1,0 +1,10 @@
+FROM node:alpine
+
+WORKDIR /app
+
+RUN apk update
+RUN apk add python3 make g++ git
+ADD ./ ./
+RUN yarn install
+
+CMD ["yarn", "dev"]
