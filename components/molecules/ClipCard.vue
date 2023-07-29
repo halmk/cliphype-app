@@ -27,6 +27,7 @@
     </div>
     <div class="text-subtitle-2 text--secondary ml-1">
       views: {{ view_count }}
+      <span v-show="!!hype">, hype: {{ hype }}</span>
     </div>
     <div class="text-subtitle-2 text--secondary ml-1">
       {{ formatted_created_at }}
@@ -58,6 +59,7 @@ export default {
     url: String,
     view_count: Number,
     vod_offset: Number,
+    hype: String,
   },
   data: () => ({
     overlay: false,
